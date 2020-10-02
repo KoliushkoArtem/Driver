@@ -16,8 +16,8 @@ spring:
     multipart: # MULTIPART (MultipartProperties)
       enabled: true  # Enable multipart uploads
       file-size-threshold: 2KB  # Threshold after which files are written to disk.
-      max-file-size: 2MB  # Max file size.
-      max-request-size: 215MB  # Max Request Size
+      max-file-size: 124MB  # Max file size.
+      max-request-size: 512MB  # Max Request Size
 
   mail:
     protocol: smtp

@@ -20,7 +20,7 @@ public class Swagger2Configuration {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .paths(PathSelectors.ant("/api/*"))
-                .apis(RequestHandlerSelectors.basePackage("pl.coderslab.driver.controller"))
+                .apis(RequestHandlerSelectors.basePackage("pl.coderslab.driver"))
                 .build()
                 .apiInfo(apiInfo());
     }
