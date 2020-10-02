@@ -13,14 +13,8 @@ public class AdviceRating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private int like;
+    private int likeCount;
 
-    private int dislike;
-
-    private int rating;
-
-    public void setRating() {
-        this.rating = like - dislike;
-    }
+    private int dislikeCount;
 }
 

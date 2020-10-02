@@ -6,8 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "files")
-public class AdviceFile {
+public class MediaFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

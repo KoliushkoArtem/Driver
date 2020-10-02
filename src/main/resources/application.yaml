@@ -1,16 +1,17 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/driver?serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/driver?serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: coderslab
-    initialization-mode: always # needed for using data reading from files
-    data: classpath:META-INF/sql/data.sql  # data files path, can be used for reading from multiple files
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
-      hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
 
   servlet:
     multipart: # MULTIPART (MultipartProperties)
