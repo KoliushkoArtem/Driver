@@ -29,6 +29,9 @@ public class Advice {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private AdviceRating rating;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private AdviceTest test;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime creationDateTime;
