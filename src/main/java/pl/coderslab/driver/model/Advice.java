@@ -1,17 +1,16 @@
 package pl.coderslab.driver.model;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "advices")
-public class Advice {
+public class Advice extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,11 +30,4 @@ public class Advice {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private AdviceTest test;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime creationDateTime;
-
-    @UpdateTimestamp
-    private LocalDateTime updateDateTime;
 }
