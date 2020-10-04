@@ -24,6 +24,6 @@ public class Question {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private AnswerVariant correctAnswer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private AdviceTest test;
 }
