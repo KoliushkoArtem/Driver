@@ -19,10 +19,7 @@ public class Question {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "question")
     @Size(max = 3)
-    private Set<AnswerVariant> answerVariants;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private AnswerVariant correctAnswer;
+    private Set<AnswerVariant> answers;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private AdviceTest test;

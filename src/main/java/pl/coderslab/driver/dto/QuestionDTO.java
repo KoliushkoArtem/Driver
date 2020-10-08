@@ -2,14 +2,12 @@ package pl.coderslab.driver.dto;
 
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 public class QuestionDTO {
 
     private String question;
 
-    private List<AnswerVariantDTO> answers;
-
-    private AnswerVariantDTO correctAnswer;
+    private Set<AnswerVariantDTO> answers;
 }

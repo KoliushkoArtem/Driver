@@ -15,8 +15,9 @@ public class AnswerVariant {
 
     private String answer;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private MediaFile image;
+    private String mediaFileDownloadUrl;
+
+    private boolean isVariantCorrect;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Question question;

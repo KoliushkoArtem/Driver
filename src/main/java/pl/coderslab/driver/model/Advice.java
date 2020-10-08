@@ -23,11 +23,10 @@ public class Advice extends Auditable {
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private MediaFile file;
-
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private AdviceRating rating;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private AdviceTest test;
+
+    private String mediaFileDownloadUrl;
 }

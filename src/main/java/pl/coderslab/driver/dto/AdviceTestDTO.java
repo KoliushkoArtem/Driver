@@ -2,12 +2,12 @@ package pl.coderslab.driver.dto;
 
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 public class AdviceTestDTO {
 
     private long id;
 
-    private List<QuestionDTO> questions;
+    private Set<QuestionDTO> questions;
 }

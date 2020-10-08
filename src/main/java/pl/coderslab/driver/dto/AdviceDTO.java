@@ -1,7 +1,6 @@
 package pl.coderslab.driver.dto;
 
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class AdviceDTO {
@@ -12,7 +11,7 @@ public class AdviceDTO {
 
     private String adviceDescription;
 
-    private MultipartFile file;
+    private String mediaFileDownloadUrl;
 
     private int likeCount;
 

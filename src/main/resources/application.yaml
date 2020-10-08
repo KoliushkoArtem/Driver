@@ -1,9 +1,17 @@
+config:
+  host: localhost:8080
+
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/driver?serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: coderslab
+
+  data:
+    rest:
+      base-path: localhost:8080/hi
 
   jpa:
     hibernate:
@@ -12,7 +20,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     open-in-view: true # Open Session in View
-
 
   servlet:
     multipart: # MULTIPART (MultipartProperties)
@@ -30,6 +37,10 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+
+server:
+  servlet:
+    context-path=: /api
 
 logging:
   level:

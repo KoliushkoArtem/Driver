@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Table(name = "files")
 public class MediaFile {
 
     @Id
@@ -15,9 +14,9 @@ public class MediaFile {
 
     private String name;
 
-    private String fileExtension;
+    private String contentType;
 
     @Lob
-    private byte[] file;
+    private byte[] mediaFile;
 }
 
