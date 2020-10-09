@@ -21,16 +21,15 @@ public class ConverterDTO {
         return convertedAdviceDto;
     }
 
-    public static Advice convertToAdvice(AdviceDTO adviceDto) {
+    public static Advice convertToAdvice(AdviceDTO adviceDTO) {
         Advice convertedAdvice = new Advice();
-        convertedAdvice.setId(adviceDto.getId());
-        convertedAdvice.setName(adviceDto.getAdviceName());
-        convertedAdvice.setDescription(adviceDto.getAdviceDescription());
-        convertedAdvice.setMediaFileDownloadUrl(adviceDto.getMediaFileDownloadUrl());
-        convertedAdvice.getRating().setLikeCount(adviceDto.getLikeCount());
-        convertedAdvice.getRating().setDislikeCount(adviceDto.getDislikeCount());
-        convertedAdvice.getTest().setId(adviceDto.getTestId());
-
+        convertedAdvice.setId(adviceDTO.getId());
+        convertedAdvice.setName(adviceDTO.getAdviceName());
+        convertedAdvice.setDescription(adviceDTO.getAdviceDescription());
+        convertedAdvice.setMediaFileDownloadUrl(adviceDTO.getMediaFileDownloadUrl());
+        convertedAdvice.getRating().setLikeCount(adviceDTO.getLikeCount());
+        convertedAdvice.getRating().setDislikeCount(adviceDTO.getDislikeCount());
+        convertedAdvice.getTest().setId(adviceDTO.getTestId());
         return convertedAdvice;
     }
 
