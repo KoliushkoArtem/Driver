@@ -4,14 +4,15 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import pl.coderslab.driver.dto.MediaFileDTO;
+import pl.coderslab.driver.dto.MediaFileDto;
 import pl.coderslab.driver.service.MediaFileService;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
+@RequestMapping("/file")
+@Transactional
 public class MediaFileController {
 
     private final MediaFileService fileService;
@@ -20,9 +21,9 @@ public class MediaFileController {
         this.fileService = fileService;
     }
 
-    @GetMapping("/file/download")
+    @GetMapping("/download")
     public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam(name = "fileId") long fileId) {
-        MediaFileDTO mediaFileDTO = fileService.getById(fileId);
+        MediaFileDto mediaFileDTO = fileService.getById(fileId);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(mediaFileDTO.getContentType()))
@@ -30,20 +31,18 @@ public class MediaFileController {
                 .body(new ByteArrayResource(mediaFileDTO.getMediaFile()));
     }
 
-    @PostMapping("/file/upload")
-    public String uploadFileAndGetFileDownloadUrl(@RequestParam(name = "file") MultipartFile file, HttpServletRequest request) {
-        long fileId = fileService.save(file);
-
-        return request.getHeader("host") + "/api/file/download?fileId=" + fileId;
+    @PostMapping("/upload")
+    public long uploadFileAndGetFileId(@RequestParam(name = "file") MultipartFile file) {
+        return fileService.save(file).getId();
     }
 
-    @PutMapping("/file/update")
+    @PutMapping("/update")
     public void updateFile(@RequestParam(name = "file") MultipartFile file, @RequestParam(name = "fileId") long id) {
 
         fileService.update(file, id);
     }
 
-    @DeleteMapping("/file/delete")
+    @DeleteMapping("/delete")
     public void delete(@RequestParam(name = "fileId") long fileId) {
 
         fileService.delete(fileId);

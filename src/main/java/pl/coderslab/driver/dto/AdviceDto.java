@@ -3,19 +3,20 @@ package pl.coderslab.driver.dto;
 import lombok.Data;
 
 @Data
-public class AdviceDTO {
+public class AdviceDto {
 
-    private long id;
+
+    private Long id;
 
     private String adviceName;
 
     private String adviceDescription;
 
-    private String mediaFileDownloadUrl;
+    private Long mediaFileId;
 
     private int likeCount;
 
     private int dislikeCount;
 
-    private long testId;
+    private Long testId;
 }

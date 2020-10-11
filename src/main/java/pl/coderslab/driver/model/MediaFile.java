@@ -1,16 +1,18 @@
 package pl.coderslab.driver.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
 @Entity
 @Data
-public class MediaFile {
+@EqualsAndHashCode(callSuper = true)
+public class MediaFile extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String name;
 

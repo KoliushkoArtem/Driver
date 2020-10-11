@@ -11,14 +11,11 @@ public class AnswerVariant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String answer;
 
-    private String mediaFileDownloadUrl;
+    private Long mediaFileId;
 
     private boolean isVariantCorrect;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Question question;
 }

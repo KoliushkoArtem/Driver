@@ -9,12 +9,12 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "advices")
+@Table(name = "advice")
 public class Advice extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @NotBlank(message = "Cannot be blank")
     private String name;
@@ -23,10 +23,10 @@ public class Advice extends Auditable {
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "rating_id")
     private AdviceRating rating;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private AdviceTest test;
+    private Long testId;
 
-    private String mediaFileDownloadUrl;
+    private Long mediaFileId;
 }

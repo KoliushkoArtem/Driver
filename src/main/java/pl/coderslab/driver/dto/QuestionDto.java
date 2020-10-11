@@ -5,9 +5,11 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class QuestionDTO {
+public class QuestionDto {
+
+    private Long id;
 
     private String question;
 
-    private Set<AnswerVariantDTO> answers;
+    private Set<AnswerVariantDto> answers;
 }

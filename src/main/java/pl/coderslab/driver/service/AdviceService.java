@@ -1,64 +1,67 @@
 package pl.coderslab.driver.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import pl.coderslab.driver.dto.AdviceDTO;
+import pl.coderslab.driver.converter.AdviceDtoConverter;
+import pl.coderslab.driver.dto.AdviceDto;
 import pl.coderslab.driver.exceptions.AdviceNotFoundException;
 import pl.coderslab.driver.model.Advice;
-import pl.coderslab.driver.repository.AdviceRatingRepository;
 import pl.coderslab.driver.repository.AdviceRepository;
-import pl.coderslab.driver.utils.ConverterDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class AdviceService {
 
     private final AdviceRepository adviceRepository;
-    private final AdviceRatingRepository ratingRepository;
 
-    public AdviceService(AdviceRepository adviceRepository, AdviceRatingRepository ratingRepository) {
+    public AdviceService(AdviceRepository adviceRepository) {
         this.adviceRepository = adviceRepository;
-        this.ratingRepository = ratingRepository;
     }
 
-    public List<AdviceDTO> getAll() {
+    public List<AdviceDto> getAll() {
         return adviceRepository.findAll()
                 .stream()
-                .map(ConverterDTO::convertToAdviceDTO)
+                .map(AdviceDtoConverter::convertToAdviceDTO)
                 .collect(Collectors.toList());
     }
 
-    public void save(AdviceDTO adviceDTO) {
-        adviceRepository.save(ConverterDTO.convertToAdvice(adviceDTO));
+    public AdviceDto save(AdviceDto adviceDTO) {
+        Advice savedAdvice = adviceRepository.save(AdviceDtoConverter.convertToAdvice(adviceDTO));
+
+        return AdviceDtoConverter.convertToAdviceDTO(savedAdvice);
     }
 
-    public void update(AdviceDTO adviceDto) {
-        Advice adviceToUpdate = ConverterDTO.convertToAdvice(adviceDto);
-        long ratingId = adviceRepository.findRatingIdByAdviceId(adviceToUpdate.getId());
+    public AdviceDto update(AdviceDto adviceDto) throws AdviceNotFoundException {
+        Advice adviceToUpdate = adviceRepository
+                .findById(adviceDto.getId()).orElseThrow(() -> new AdviceNotFoundException(adviceDto.getId()));
+        Advice updatedAdvice = updateAdvice(adviceToUpdate, adviceDto);
 
-        adviceRepository.update(adviceToUpdate.getName(), adviceToUpdate.getDescription(),
-                adviceToUpdate.getMediaFileDownloadUrl(), adviceToUpdate.getId());
-
-        ratingRepository.update(adviceToUpdate.getRating().getLikeCount(), adviceToUpdate.getRating().getDislikeCount(), ratingId);
+        return AdviceDtoConverter.convertToAdviceDTO(adviceRepository.save(updatedAdvice));
     }
-
 
     public void delete(long adviceId) {
         adviceRepository.deleteById(adviceId);
     }
 
-    public AdviceDTO findById(long adviceId) {
-        Advice adviceToReturn = adviceRepository.findById(adviceId).orElseThrow(() -> new AdviceNotFoundException(adviceId));
+    public AdviceDto findById(long adviceId) throws AdviceNotFoundException {
+        Advice adviceFromDb = adviceRepository.findById(adviceId).orElseThrow(() -> new AdviceNotFoundException(adviceId));
 
-        return ConverterDTO.convertToAdviceDTO(adviceToReturn);
+        return AdviceDtoConverter.convertToAdviceDTO(adviceFromDb);
     }
 
-    public AdviceDTO getAdviceByRatingForLast7Days() {
-        Advice bestAdvise = adviceRepository.findFirstByRatingForLast7Days();
+    public AdviceDto getAdviceByRatingForLast7Days() {
+        return AdviceDtoConverter.convertToAdviceDTO(adviceRepository.findFirstByRatingForLast7Days());
+    }
 
-        return ConverterDTO.convertToAdviceDTO(bestAdvise);
+    private Advice updateAdvice(Advice adviceToUpdate, AdviceDto adviceDto) {
+        adviceToUpdate.setName(adviceDto.getAdviceName());
+        adviceToUpdate.setDescription(adviceDto.getAdviceDescription());
+        adviceToUpdate.setMediaFileId(adviceDto.getMediaFileId());
+        adviceToUpdate.getRating().setLikeCount(adviceDto.getLikeCount());
+        adviceToUpdate.getRating().setDislikeCount(adviceDto.getDislikeCount());
+        adviceToUpdate.setTestId(adviceDto.getTestId());
+
+        return adviceToUpdate;
     }
 }

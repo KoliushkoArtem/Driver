@@ -1,6 +1,6 @@
 package pl.coderslab.driver.exceptions;
 
-public class AdviceNotFoundException extends RuntimeException{
+public class AdviceNotFoundException extends RuntimeException {
 
     private final Long adviceId;
 

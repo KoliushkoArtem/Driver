@@ -6,4 +6,5 @@ import pl.coderslab.driver.model.AdviceTest;
 
 @Repository
 public interface AdviceTestRepository extends JpaRepository<AdviceTest, Long> {
+
 }

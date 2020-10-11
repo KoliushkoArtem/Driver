@@ -3,7 +3,7 @@ package pl.coderslab.driver.dto;
 import lombok.Data;
 
 @Data
-public class MediaFileDTO {
+public class MediaFileDto {
 
     private String name;
 

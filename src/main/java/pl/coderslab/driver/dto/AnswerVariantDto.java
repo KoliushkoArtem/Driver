@@ -3,11 +3,13 @@ package pl.coderslab.driver.dto;
 import lombok.Data;
 
 @Data
-public class AnswerVariantDTO {
+public class AnswerVariantDto {
+
+    private Long id;
 
     private String answer;
 
-    private String mediaFileDownloadUrl;
+    private Long mediaFileId;
 
     private boolean isVariantCorrect;
 }

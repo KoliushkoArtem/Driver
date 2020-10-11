@@ -11,10 +11,13 @@ public class AdviceRating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    private int likeCount;
+    private Integer likeCount;
 
-    private int dislikeCount;
+    private Integer dislikeCount;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "rating")
+    private Advice advice;
 }
 
