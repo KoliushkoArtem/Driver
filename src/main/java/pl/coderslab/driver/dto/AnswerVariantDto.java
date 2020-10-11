@@ -11,5 +11,7 @@ public class AnswerVariantDto {
 
     private Long mediaFileId;
 
+    private String mediaFileDownloadLink;
+
     private boolean isVariantCorrect;
 }

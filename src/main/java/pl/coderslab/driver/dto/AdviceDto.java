@@ -14,9 +14,13 @@ public class AdviceDto {
 
     private Long mediaFileId;
 
+    private String mediaFileDownloadLink;
+
     private int likeCount;
 
     private int dislikeCount;
 
     private Long testId;
+
+    private String testLink;
 }

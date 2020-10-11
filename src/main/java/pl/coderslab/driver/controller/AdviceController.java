@@ -6,7 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.driver.dto.AdviceDto;
 import pl.coderslab.driver.service.AdviceService;
+import pl.coderslab.driver.utils.UrlCreator;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -23,21 +25,27 @@ public class AdviceController {
 
     @GetMapping("/all")
     @ApiOperation(value = "Get all advices")
-    public ResponseEntity<List<AdviceDto>> getAllAdvices() {
+    public ResponseEntity<List<AdviceDto>> getAllAdvices(HttpServletRequest request) {
         List<AdviceDto> allAdvices = adviceService.getAll();
+        allAdvices.forEach(a -> addFileDownloadAndTestUrlsToAdvice(request, a));
+
         return ResponseEntity.ok(allAdvices);
     }
 
     @GetMapping("/get")
     @ApiOperation(value = "Get advice by id")
-    public ResponseEntity<AdviceDto> getAdviceById(@RequestParam(name = "adviceId") long adviceId) {
-        return ResponseEntity.ok(adviceService.findById(adviceId));
+    public ResponseEntity<AdviceDto> getAdviceById(@RequestParam(name = "adviceId") long adviceId, HttpServletRequest request) {
+        AdviceDto adviceToReturn = adviceService.findById(adviceId);
+        addFileDownloadAndTestUrlsToAdvice(request, adviceToReturn);
+        return ResponseEntity.ok(adviceToReturn);
     }
 
     @GetMapping("/topOne")
     @ApiOperation(value = "Get advice with best rating for last 7 days")
-    public ResponseEntity<AdviceDto> getAdviceByRatingForLast7Days() {
-        return ResponseEntity.ok(adviceService.getAdviceByRatingForLast7Days());
+    public ResponseEntity<AdviceDto> getAdviceByRatingForLast7Days(HttpServletRequest request) {
+        AdviceDto adviceToReturn = adviceService.getAdviceByRatingForLast7Days();
+        addFileDownloadAndTestUrlsToAdvice(request, adviceToReturn);
+        return ResponseEntity.ok(adviceToReturn);
     }
 
     @PostMapping(value = "/add")
@@ -53,5 +61,10 @@ public class AdviceController {
     @DeleteMapping("/delete")
     public void deleteAdvice(@RequestParam(name = "adviceId") long adviceId) {
         adviceService.delete(adviceId);
+    }
+
+    private void addFileDownloadAndTestUrlsToAdvice(HttpServletRequest request, AdviceDto adviceDto){
+        adviceDto.setMediaFileDownloadLink(UrlCreator.mediaFileDownloadUrl(request, adviceDto.getMediaFileId()));
+        adviceDto.setTestLink(UrlCreator.testDetailsUrl(request, adviceDto.getTestId()));
     }
 }
