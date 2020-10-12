@@ -1,5 +1,6 @@
 package pl.coderslab.driver.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.coderslab.driver.converter.AdviceDtoConverter;
 import pl.coderslab.driver.dto.AdviceDto;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class AdviceService {
 
     private final AdviceRepository adviceRepository;
@@ -20,14 +22,20 @@ public class AdviceService {
     }
 
     public List<AdviceDto> getAll() {
-        return adviceRepository.findAll()
+        List<AdviceDto> result = adviceRepository.findAll()
                 .stream()
                 .map(AdviceDtoConverter::convertToAdviceDTO)
                 .collect(Collectors.toList());
+
+        log.info("IN adviceService getAll - {} advices successfully load", result.size());
+
+        return result;
     }
 
     public AdviceDto save(AdviceDto adviceDTO) {
         Advice savedAdvice = adviceRepository.save(AdviceDtoConverter.convertToAdvice(adviceDTO));
+
+        log.info("IN adviceService save - advice {} vas saved", savedAdvice);
 
         return AdviceDtoConverter.convertToAdviceDTO(savedAdvice);
     }
@@ -37,21 +45,33 @@ public class AdviceService {
                 .findById(adviceDto.getId()).orElseThrow(() -> new AdviceNotFoundException(adviceDto.getId()));
         Advice updatedAdvice = updateAdvice(adviceToUpdate, adviceDto);
 
-        return AdviceDtoConverter.convertToAdviceDTO(adviceRepository.save(updatedAdvice));
+        AdviceDto updated = AdviceDtoConverter.convertToAdviceDTO(adviceRepository.save(updatedAdvice));
+
+        log.info("IN adviceService update - advice {} was successfully updated", updated);
+
+        return updated;
     }
 
     public void delete(long adviceId) {
         adviceRepository.deleteById(adviceId);
+
+        log.info("IN adviceService delete - advice with id: {} was successfully deleted", adviceId);
     }
 
     public AdviceDto findById(long adviceId) throws AdviceNotFoundException {
         Advice adviceFromDb = adviceRepository.findById(adviceId).orElseThrow(() -> new AdviceNotFoundException(adviceId));
 
+        log.info("IN adviceService findById - advice {} was successfully loaded", adviceFromDb);
+
         return AdviceDtoConverter.convertToAdviceDTO(adviceFromDb);
     }
 
     public AdviceDto getAdviceByRatingForLast7Days() {
-        return AdviceDtoConverter.convertToAdviceDTO(adviceRepository.findFirstByRatingForLast7Days());
+        Advice adviceFromDb = adviceRepository.findFirstByRatingForLast7Days();
+
+        log.info("IN adviceService findById - advice {} was successfully loaded", adviceFromDb);
+
+        return AdviceDtoConverter.convertToAdviceDTO(adviceFromDb);
     }
 
     private Advice updateAdvice(Advice adviceToUpdate, AdviceDto adviceDto) {

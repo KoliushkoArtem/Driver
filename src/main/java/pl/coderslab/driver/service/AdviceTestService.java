@@ -1,5 +1,6 @@
 package pl.coderslab.driver.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.coderslab.driver.converter.TestDtoConverter;
 import pl.coderslab.driver.dto.AdviceTestDto;
@@ -16,6 +17,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class AdviceTestService {
 
     private final AdviceTestRepository testRepository;
@@ -29,25 +31,36 @@ public class AdviceTestService {
     }
 
     public List<AdviceTestDto> getAll() {
-        return testRepository.findAll()
+        List<AdviceTestDto> result =  testRepository.findAll()
                 .stream()
                 .map(TestDtoConverter::convertToAdviceTestDTO)
                 .collect(Collectors.toList());
+
+        log.info("IN adviceTestService getAll - {} tests was successfully loaded", result.size());
+
+        return result;
     }
 
     public AdviceTestDto findByID(long testId) throws AdviseTestNotFoundException {
         AdviceTest testFromDb = testRepository.findById(testId)
                 .orElseThrow(() -> new AdviseTestNotFoundException(testId));
+
+        log.info("IN adviceTestService findById - test {} was successfully loaded", testFromDb);
+
         return TestDtoConverter.convertToAdviceTestDTO(testFromDb);
     }
 
     public void delete(long testId) {
         testRepository.deleteById(testId);
+
+        log.info("IN adviceTestService delete - tests with Id: {} was deleted", testId);
     }
 
     public AdviceTestDto save(AdviceTestDto testDto) {
         AdviceTest adviceTestCandidate = TestDtoConverter.convertToAdviceTest(testDto);
         AdviceTest savedTest = testRepository.save(adviceTestCandidate);
+
+        log.info("IN adviceTestService save - test {} was successfully saved", savedTest);
 
         return TestDtoConverter.convertToAdviceTestDTO(savedTest);
     }
@@ -62,6 +75,8 @@ public class AdviceTestService {
         testToUpdate.setQuestions(questionsUpdate(testToUpdate.getQuestions(), testCandidate.getQuestions()));
 
         AdviceTest updatedTest = testRepository.save(testToUpdate);
+
+        log.info("IN adviceTestService update - test {} was successfully updated", updatedTest);
 
         return TestDtoConverter.convertToAdviceTestDTO(updatedTest);
     }

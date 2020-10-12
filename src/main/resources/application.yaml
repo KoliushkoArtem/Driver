@@ -4,6 +4,9 @@ spring:
     url: jdbc:mysql://localhost:3306/driver?serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
     password: coderslab
+    initialization-mode: always # needed for using data reading from files
+    data: classpath:META-INF/sql/data.sql # path to file with base SQL loading code
+    continue-on-error: true # needed to avoid errors while data grom file is read
 
   jpa:
     hibernate:
@@ -41,6 +44,12 @@ logging:
     org:
       hibernate:
         SQL: INFO
+
+jwt:
+  token:
+    secret: artemko
+    expired: 3600000
+
 
 # Uncomment bottom line if Spring Boot debug is needed
 # debug: true

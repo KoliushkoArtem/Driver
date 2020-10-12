@@ -12,10 +12,6 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "advice")
 public class Advice extends Auditable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @NotBlank(message = "Cannot be blank")
     private String name;
 

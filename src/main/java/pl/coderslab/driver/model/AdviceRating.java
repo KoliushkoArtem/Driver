@@ -1,17 +1,15 @@
 package pl.coderslab.driver.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "rating")
-public class AdviceRating {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class AdviceRating extends Auditable{
 
     private Integer likeCount;
 

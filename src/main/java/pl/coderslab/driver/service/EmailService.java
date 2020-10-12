@@ -1,10 +1,12 @@
 package pl.coderslab.driver.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class EmailService {
 
     private final JavaMailSender mailSender;
@@ -20,5 +22,7 @@ public class EmailService {
         message.setText(text);
 
         mailSender.send(message);
+
+        log.info("IN mailService sendMail - mail to {} vas successfully send", to);
     }
 }

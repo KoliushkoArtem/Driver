@@ -1,17 +1,15 @@
 package pl.coderslab.driver.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "answers")
-public class AnswerVariant {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class AnswerVariant extends Auditable{
 
     private String answer;
 
