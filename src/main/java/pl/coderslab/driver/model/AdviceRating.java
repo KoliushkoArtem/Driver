@@ -3,13 +3,16 @@ package pl.coderslab.driver.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "rating")
-public class AdviceRating extends Auditable{
+public class AdviceRating extends Auditable {
 
     private Integer likeCount;
 

@@ -10,7 +10,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "question")
-public class Question extends Auditable{
+public class Question extends Auditable {
 
     private String question;
 

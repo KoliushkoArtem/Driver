@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class AdviceDto {
 
-
     private Long id;
 
     private String adviceName;

@@ -55,7 +55,7 @@ public class AdviceTestController {
         testService.delete(testId);
     }
 
-    private void addMultiMediaDownloadUrl (HttpServletRequest request, AdviceTestDto testDto){
+    private void addMultiMediaDownloadUrl(HttpServletRequest request, AdviceTestDto testDto) {
         testDto.getQuestions().forEach(q -> {
             q.getAnswers().forEach(a -> a.setMediaFileDownloadLink(UrlCreator.mediaFileDownloadUrl(request, a.getMediaFileId())));
         });

@@ -28,7 +28,6 @@ public class AdviceController {
     public ResponseEntity<List<AdviceDto>> getAllAdvices(HttpServletRequest request) {
         List<AdviceDto> allAdvices = adviceService.getAll();
         allAdvices.forEach(a -> addFileDownloadAndTestUrlsToAdvice(request, a));
-
         return ResponseEntity.ok(allAdvices);
     }
 
@@ -63,7 +62,7 @@ public class AdviceController {
         adviceService.delete(adviceId);
     }
 
-    private void addFileDownloadAndTestUrlsToAdvice(HttpServletRequest request, AdviceDto adviceDto){
+    private void addFileDownloadAndTestUrlsToAdvice(HttpServletRequest request, AdviceDto adviceDto) {
         adviceDto.setMediaFileDownloadLink(UrlCreator.mediaFileDownloadUrl(request, adviceDto.getMediaFileId()));
         adviceDto.setTestLink(UrlCreator.testDetailsUrl(request, adviceDto.getTestId()));
     }

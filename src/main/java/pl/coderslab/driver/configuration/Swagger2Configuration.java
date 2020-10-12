@@ -31,7 +31,7 @@ public class Swagger2Configuration {
                 "Api for improving driving skills",
                 "1.0",
                 "Free to use",
-                new springfox.documentation.service.Contact("Koliushko Artem","https://www.linkedin.com/in/artem-koliushko-7bb8a2106/", "koliushko.a@gmail.com"),
+                new springfox.documentation.service.Contact("Koliushko Artem", "https://www.linkedin.com/in/artem-koliushko-7bb8a2106/", "koliushko.a@gmail.com"),
                 "API license",
                 "https://www.linkedin.com/in/artem-koliushko-7bb8a2106/",
                 Collections.emptyList());

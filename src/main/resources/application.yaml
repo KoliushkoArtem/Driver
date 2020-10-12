@@ -45,11 +45,5 @@ logging:
       hibernate:
         SQL: INFO
 
-jwt:
-  token:
-    secret: artemko
-    expired: 3600000
-
-
 # Uncomment bottom line if Spring Boot debug is needed
 # debug: true

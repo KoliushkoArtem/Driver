@@ -30,7 +30,7 @@ public class MediaFileService {
     public MediaFile save(MultipartFile file) throws RuntimeException {
         MediaFile savedFile = mediaFileRepository.save(MediaFileDtoConverter.convertMultipartFileToMediaFile(file));
 
-        log.info("IN mediaFileService save - mediaFile {} vas saved", savedFile);
+        log.info("IN mediaFileService save - mediaFile with name{} vas saved and received Id: {}", savedFile.getName(), savedFile.getId());
 
         return savedFile;
     }
@@ -44,7 +44,7 @@ public class MediaFileService {
 
         mediaFileRepository.save(fileToUpdate);
 
-        log.info("IN mediaFileService update - mediaFile {} vas updated", fileToUpdate);
+        log.info("IN mediaFileService update - mediaFile with Id: {} vas updated", id);
     }
 
     public void delete(long id) {

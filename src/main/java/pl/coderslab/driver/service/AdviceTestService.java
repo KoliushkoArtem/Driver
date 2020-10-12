@@ -31,7 +31,7 @@ public class AdviceTestService {
     }
 
     public List<AdviceTestDto> getAll() {
-        List<AdviceTestDto> result =  testRepository.findAll()
+        List<AdviceTestDto> result = testRepository.findAll()
                 .stream()
                 .map(TestDtoConverter::convertToAdviceTestDTO)
                 .collect(Collectors.toList());

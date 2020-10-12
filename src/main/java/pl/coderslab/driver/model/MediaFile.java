@@ -3,7 +3,8 @@ package pl.coderslab.driver.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 @Entity
 @Data
