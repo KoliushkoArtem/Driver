@@ -19,7 +19,7 @@ public class Swagger2Configuration {
     public Docket swaggerConfiguration() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .paths(PathSelectors.ant("/api/**"))
+                .paths(PathSelectors.ant("/**"))
                 .apis(RequestHandlerSelectors.basePackage("pl.coderslab.driver"))
                 .build()
                 .apiInfo(apiInfo());
@@ -28,12 +28,14 @@ public class Swagger2Configuration {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Driver API",
-                "Api for improving driving skills",
+                "Api for improving driving skills\nAll methods allowed for admins, for regular users allowed only GET methods" +
+                        "\nTo use all methods in controllers you should be authorized" +
+                        "\nFor login as ADMIN use username: admin, password: admin\nFor login as USER use username:user, password: user",
                 "1.0",
                 "Free to use",
-                new springfox.documentation.service.Contact("Koliushko Artem", "https://www.linkedin.com/in/artem-koliushko-7bb8a2106/", "koliushko.a@gmail.com"),
+                new springfox.documentation.service.Contact("Koliushko Artem", "https://www.linkedin.com/in/artem-koliushko/", "koliushko.a@gmail.com"),
                 "API license",
-                "https://www.linkedin.com/in/artem-koliushko-7bb8a2106/",
+                "https://www.linkedin.com/in/artem-koliushko/",
                 Collections.emptyList());
     }
 }

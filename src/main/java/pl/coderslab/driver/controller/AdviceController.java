@@ -2,6 +2,7 @@ package pl.coderslab.driver.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.driver.dto.AdviceDto;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/advice")
+@RequestMapping("/api/advices")
 @Transactional
 public class AdviceController {
 
@@ -23,7 +24,7 @@ public class AdviceController {
         this.adviceService = adviceService;
     }
 
-    @GetMapping("/all")
+    @GetMapping
     @ApiOperation(value = "Get all advices")
     public ResponseEntity<List<AdviceDto>> getAllAdvices(HttpServletRequest request) {
         List<AdviceDto> allAdvices = adviceService.getAll();
@@ -31,9 +32,9 @@ public class AdviceController {
         return ResponseEntity.ok(allAdvices);
     }
 
-    @GetMapping("/get")
+    @GetMapping("/get/{id}")
     @ApiOperation(value = "Get advice by id")
-    public ResponseEntity<AdviceDto> getAdviceById(@RequestParam(name = "adviceId") long adviceId, HttpServletRequest request) {
+    public ResponseEntity<AdviceDto> getAdviceById(@PathVariable(name = "id") long adviceId, HttpServletRequest request) {
         AdviceDto adviceToReturn = adviceService.findById(adviceId);
         addFileDownloadAndTestUrlsToAdvice(request, adviceToReturn);
         return ResponseEntity.ok(adviceToReturn);
@@ -47,18 +48,21 @@ public class AdviceController {
         return ResponseEntity.ok(adviceToReturn);
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping(value = "/add")
     public ResponseEntity<AdviceDto> addAdvice(@RequestBody AdviceDto adviceDTO) {
         return ResponseEntity.ok(adviceService.save(adviceDTO));
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/update")
     public ResponseEntity<AdviceDto> updateAdvice(@RequestBody AdviceDto adviceDto) {
         return ResponseEntity.ok(adviceService.update(adviceDto));
     }
 
-    @DeleteMapping("/delete")
-    public void deleteAdvice(@RequestParam(name = "adviceId") long adviceId) {
+    @Secured("ROLE_ADMIN")
+    @DeleteMapping("/delete/{id}")
+    public void deleteAdvice(@PathVariable(name = "id") long adviceId) {
         adviceService.delete(adviceId);
     }
 

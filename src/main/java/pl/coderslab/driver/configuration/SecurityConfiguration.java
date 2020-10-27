@@ -4,14 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import pl.coderslab.driver.security.jwt.JwtConfigurer;
 import pl.coderslab.driver.security.jwt.JwtTokenProvider;
 
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider tokenProvider;
@@ -37,18 +40,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/auth/login").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/swagger-resources").permitAll()
+                .antMatchers("/swagger-ui/**").permitAll()
+                .antMatchers("/v2/api-docs/**").permitAll()
+                .anyRequest().anonymous()
                 .and()
                 .apply(new JwtConfigurer(tokenProvider));
-    }
-
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring()
-                .antMatchers("/swagger-ui/**")
-                .antMatchers("/error")
-                .antMatchers("/v2/api-docs/**")
-                .antMatchers("/swagger-resources")
-                .antMatchers("/api/auth/login");
     }
 }
