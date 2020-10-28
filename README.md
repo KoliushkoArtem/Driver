@@ -8,7 +8,7 @@
 ###Download all files or clone repository and run at the server
 #####To see app Swagger2 documentation after server starting use link like below
 
-{context path}/api/swagger-ui/index.html
+{context path}/swagger-ui/index.html
 
 ##### For example
-http://localhost:8080/api/swagger-ui/index.html
+http://localhost:8080/swagger-ui/index.html
