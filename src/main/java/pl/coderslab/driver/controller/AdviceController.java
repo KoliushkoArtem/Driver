@@ -5,11 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.coderslab.driver.configuration.YamlUrlConfiguration;
 import pl.coderslab.driver.dto.AdviceDto;
 import pl.coderslab.driver.service.AdviceService;
-import pl.coderslab.driver.utils.UrlCreator;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -19,55 +18,59 @@ public class AdviceController {
 
     private final AdviceService adviceService;
 
+    private final YamlUrlConfiguration yamlUrlConfiguration;
 
-    public AdviceController(AdviceService adviceService) {
+    public AdviceController(AdviceService adviceService, YamlUrlConfiguration contentUrlConfiguration) {
         this.adviceService = adviceService;
+        this.yamlUrlConfiguration = contentUrlConfiguration;
     }
 
     @GetMapping
     @ApiOperation(value = "Get all advices")
-    public ResponseEntity<List<AdviceDto>> getAllAdvices(HttpServletRequest request) {
+    public ResponseEntity<List<AdviceDto>> getAllAdvices() {
         List<AdviceDto> allAdvices = adviceService.getAll();
-        allAdvices.forEach(a -> addFileDownloadAndTestUrlsToAdvice(request, a));
+        allAdvices.forEach(this::addFileDownloadAndTestUrlsToAdvice);
+
         return ResponseEntity.ok(allAdvices);
     }
 
     @GetMapping("/get/{id}")
     @ApiOperation(value = "Get advice by id")
-    public ResponseEntity<AdviceDto> getAdviceById(@PathVariable(name = "id") long adviceId, HttpServletRequest request) {
-        AdviceDto adviceToReturn = adviceService.findById(adviceId);
-        addFileDownloadAndTestUrlsToAdvice(request, adviceToReturn);
-        return ResponseEntity.ok(adviceToReturn);
+    public ResponseEntity<AdviceDto> getAdviceById(@PathVariable(name = "id") long adviceId) {
+        return ResponseEntity.ok(addFileDownloadAndTestUrlsToAdvice(adviceService.findById(adviceId)));
     }
 
     @GetMapping("/topOne")
     @ApiOperation(value = "Get advice with best rating for last 7 days")
-    public ResponseEntity<AdviceDto> getAdviceByRatingForLast7Days(HttpServletRequest request) {
-        AdviceDto adviceToReturn = adviceService.getAdviceByRatingForLast7Days();
-        addFileDownloadAndTestUrlsToAdvice(request, adviceToReturn);
-        return ResponseEntity.ok(adviceToReturn);
+    public ResponseEntity<AdviceDto> getAdviceByRatingForLast7Days() {
+        return ResponseEntity.ok(addFileDownloadAndTestUrlsToAdvice(adviceService.getAdviceByRatingForLast7Days()));
     }
 
     @Secured("ROLE_ADMIN")
     @PostMapping(value = "/add")
+    @ApiOperation(value = "Create advice")
     public ResponseEntity<AdviceDto> addAdvice(@RequestBody AdviceDto adviceDTO) {
-        return ResponseEntity.ok(adviceService.save(adviceDTO));
+        return ResponseEntity.ok(addFileDownloadAndTestUrlsToAdvice(adviceService.save(adviceDTO)));
     }
 
     @Secured("ROLE_ADMIN")
     @PutMapping("/update")
+    @ApiOperation(value = "Update advice")
     public ResponseEntity<AdviceDto> updateAdvice(@RequestBody AdviceDto adviceDto) {
-        return ResponseEntity.ok(adviceService.update(adviceDto));
+        return ResponseEntity.ok(addFileDownloadAndTestUrlsToAdvice(adviceService.update(adviceDto)));
     }
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/delete/{id}")
+    @ApiOperation(value = "Delete advice by id")
     public void deleteAdvice(@PathVariable(name = "id") long adviceId) {
         adviceService.delete(adviceId);
     }
 
-    private void addFileDownloadAndTestUrlsToAdvice(HttpServletRequest request, AdviceDto adviceDto) {
-        adviceDto.setMediaFileDownloadLink(UrlCreator.mediaFileDownloadUrl(request, adviceDto.getMediaFileId()));
-        adviceDto.setTestLink(UrlCreator.testDetailsUrl(request, adviceDto.getTestId()));
+    private AdviceDto addFileDownloadAndTestUrlsToAdvice(AdviceDto adviceDto) {
+        adviceDto.setMediaFileDownloadLink(yamlUrlConfiguration.getMediaFileDownloadUrl(adviceDto.getMediaFileId()));
+        adviceDto.setTestLink(yamlUrlConfiguration.getTestUrl(adviceDto.getTestId()));
+
+        return adviceDto;
     }
 }

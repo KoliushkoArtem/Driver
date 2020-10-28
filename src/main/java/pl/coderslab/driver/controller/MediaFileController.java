@@ -1,5 +1,6 @@
 package pl.coderslab.driver.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,6 +24,7 @@ public class MediaFileController {
     }
 
     @GetMapping("/download/{id}")
+    @ApiOperation(value = "Download media file by id")
     public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable(name = "id") long fileId) {
         MediaFileDto mediaFileDTO = fileService.getById(fileId);
 
@@ -34,21 +36,22 @@ public class MediaFileController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("/upload")
+    @ApiOperation(value = "Upload media file")
     public long uploadFileAndGetFileId(@RequestParam(name = "file") MultipartFile file) {
         return fileService.save(file).getId();
     }
 
     @Secured("ROLE_ADMIN")
     @PutMapping("/update/{id}")
+    @ApiOperation(value = "Update media file by id")
     public void updateFile(@RequestParam(name = "file") MultipartFile file, @PathVariable(name = "id") long id) {
-
         fileService.update(file, id);
     }
 
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/delete/{id}")
+    @ApiOperation(value = "Delete media file by id")
     public void delete(@PathVariable(name = "id") long fileId) {
-
         fileService.delete(fileId);
     }
 }

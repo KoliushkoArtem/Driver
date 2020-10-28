@@ -1,5 +1,6 @@
 package pl.coderslab.driver.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,6 +33,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
+    @ApiOperation(value = "Login endpoint")
     public ResponseEntity<AuthenticationResponseDto> login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
             String username = requestDto.getUsername();

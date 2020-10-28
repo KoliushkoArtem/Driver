@@ -29,7 +29,7 @@ public class Swagger2Configuration {
         return new ApiInfo(
                 "Driver API",
                 "Api for improving driving skills\nAll methods allowed for admins, for regular users allowed only GET methods" +
-                        "\nTo use all methods in controllers you should be authorized" +
+                        "\nTo use all methods in controllers you should be authorized\nTo test application you can login using bottom variants:" +
                         "\nFor login as ADMIN use username: admin, password: admin\nFor login as USER use username:user, password: user",
                 "1.0",
                 "Free to use",
