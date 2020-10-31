@@ -24,7 +24,7 @@ public class AdviceService {
     public List<AdviceDto> getAll() {
         List<AdviceDto> result = adviceRepository.findAll()
                 .stream()
-                .map(AdviceDtoConverter::convertToAdviceDTO)
+                .map(AdviceDtoConverter::convertToAdviceDto)
                 .collect(Collectors.toList());
 
         log.info("IN adviceService getAll - {} advices successfully load", result.size());
@@ -37,7 +37,7 @@ public class AdviceService {
 
         log.info("IN adviceService save - advice {} vas saved", savedAdvice);
 
-        return AdviceDtoConverter.convertToAdviceDTO(savedAdvice);
+        return AdviceDtoConverter.convertToAdviceDto(savedAdvice);
     }
 
     public AdviceDto update(AdviceDto adviceDto) throws AdviceNotFoundException {
@@ -45,7 +45,7 @@ public class AdviceService {
                 .findById(adviceDto.getId()).orElseThrow(() -> new AdviceNotFoundException(adviceDto.getId()));
         Advice updatedAdvice = updateAdvice(adviceToUpdate, adviceDto);
 
-        AdviceDto updated = AdviceDtoConverter.convertToAdviceDTO(adviceRepository.save(updatedAdvice));
+        AdviceDto updated = AdviceDtoConverter.convertToAdviceDto(adviceRepository.save(updatedAdvice));
 
         log.info("IN adviceService update - advice {} was successfully updated", updated);
 
@@ -63,7 +63,7 @@ public class AdviceService {
 
         log.info("IN adviceService findById - advice {} was successfully loaded", adviceFromDb);
 
-        return AdviceDtoConverter.convertToAdviceDTO(adviceFromDb);
+        return AdviceDtoConverter.convertToAdviceDto(adviceFromDb);
     }
 
     public AdviceDto getAdviceByRatingForLast7Days() {
@@ -71,7 +71,7 @@ public class AdviceService {
 
         log.info("IN adviceService findById - advice {} was successfully loaded", adviceFromDb);
 
-        return AdviceDtoConverter.convertToAdviceDTO(adviceFromDb);
+        return AdviceDtoConverter.convertToAdviceDto(adviceFromDb);
     }
 
     private Advice updateAdvice(Advice adviceToUpdate, AdviceDto adviceDto) {

@@ -33,7 +33,7 @@ public class AdviceTestService {
     public List<AdviceTestDto> getAll() {
         List<AdviceTestDto> result = testRepository.findAll()
                 .stream()
-                .map(TestDtoConverter::convertToAdviceTestDTO)
+                .map(TestDtoConverter::convertToAdviceTestDto)
                 .collect(Collectors.toList());
 
         log.info("IN adviceTestService getAll - {} tests was successfully loaded", result.size());
@@ -47,7 +47,7 @@ public class AdviceTestService {
 
         log.info("IN adviceTestService findById - test {} was successfully loaded", testFromDb);
 
-        return TestDtoConverter.convertToAdviceTestDTO(testFromDb);
+        return TestDtoConverter.convertToAdviceTestDto(testFromDb);
     }
 
     public void delete(long testId) {
@@ -62,7 +62,7 @@ public class AdviceTestService {
 
         log.info("IN adviceTestService save - test {} was successfully saved", savedTest);
 
-        return TestDtoConverter.convertToAdviceTestDTO(savedTest);
+        return TestDtoConverter.convertToAdviceTestDto(savedTest);
     }
 
 
@@ -78,7 +78,7 @@ public class AdviceTestService {
 
         log.info("IN adviceTestService update - test {} was successfully updated", updatedTest);
 
-        return TestDtoConverter.convertToAdviceTestDTO(updatedTest);
+        return TestDtoConverter.convertToAdviceTestDto(updatedTest);
     }
 
     private Set<Question> questionsUpdate(Set<Question> questionsToUpdate, Set<Question> questionsCandidates) {

@@ -5,7 +5,7 @@ import pl.coderslab.driver.model.AnswerVariant;
 
 public class AnswerVariantDtoConverter {
 
-    public static AnswerVariantDto convertToAnswerVariantDTO(AnswerVariant answerVariant) {
+    public static AnswerVariantDto convertToAnswerVariantDto(AnswerVariant answerVariant) {
         AnswerVariantDto convertedAnswerVariantDTO = new AnswerVariantDto();
         convertedAnswerVariantDTO.setId(answerVariant.getId());
         convertedAnswerVariantDTO.setAnswer(answerVariant.getAnswer());

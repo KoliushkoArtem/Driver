@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class MediaFileDtoConverter {
 
-    public static MediaFileDto convertToMediaFileDTO(MediaFile mediaFile) {
+    public static MediaFileDto convertToMediaFileDto(MediaFile mediaFile) {
         MediaFileDto convertedMediaFileDto = new MediaFileDto();
         convertedMediaFileDto.setName(mediaFile.getName());
         convertedMediaFileDto.setContentType(mediaFile.getContentType());

@@ -7,7 +7,7 @@ import pl.coderslab.driver.model.AdviceRating;
 public class AdviceDtoConverter {
 
 
-    public static AdviceDto convertToAdviceDTO(Advice advice) {
+    public static AdviceDto convertToAdviceDto(Advice advice) {
         AdviceDto convertedAdviceDto = new AdviceDto();
         convertedAdviceDto.setId(advice.getId());
         convertedAdviceDto.setAdviceName(advice.getName());

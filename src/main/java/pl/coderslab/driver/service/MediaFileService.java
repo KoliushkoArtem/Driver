@@ -24,7 +24,7 @@ public class MediaFileService {
 
         log.info("IN mediaFileService getById - mediaFile with id: {} vas successfully loaded", id);
 
-        return MediaFileDtoConverter.convertToMediaFileDTO(fileFromRepo);
+        return MediaFileDtoConverter.convertToMediaFileDto(fileFromRepo);
     }
 
     public MediaFile save(MultipartFile file) throws RuntimeException {

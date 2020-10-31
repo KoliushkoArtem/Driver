@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 
 public class TestDtoConverter {
 
-    public static AdviceTestDto convertToAdviceTestDTO(AdviceTest adviceTest) {
+    public static AdviceTestDto convertToAdviceTestDto(AdviceTest adviceTest) {
         AdviceTestDto adviceTestDto = new AdviceTestDto();
         adviceTestDto.setId(adviceTest.getId());
         adviceTestDto.setName(adviceTest.getName());
         adviceTestDto.setQuestions(adviceTest.getQuestions()
                 .stream()
-                .map(QuestionDtoConverter::convertToQuestionDTO)
+                .map(QuestionDtoConverter::convertToQuestionDto)
                 .collect(Collectors.toSet()));
         adviceTestDto.setAdviceId(adviceTest.getAdviceId());
 

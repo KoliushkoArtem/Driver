@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 
 public class QuestionDtoConverter {
 
-    public static QuestionDto convertToQuestionDTO(Question question) {
+    public static QuestionDto convertToQuestionDto(Question question) {
         QuestionDto questionDto = new QuestionDto();
         questionDto.setId(question.getId());
         questionDto.setQuestion(question.getQuestion());
         questionDto.setAnswers(question.getAnswers()
                 .stream()
-                .map(AnswerVariantDtoConverter::convertToAnswerVariantDTO)
+                .map(AnswerVariantDtoConverter::convertToAnswerVariantDto)
                 .collect(Collectors.toSet()));
 
         return questionDto;
