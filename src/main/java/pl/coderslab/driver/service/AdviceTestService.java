@@ -9,8 +9,6 @@ import pl.coderslab.driver.model.AdviceTest;
 import pl.coderslab.driver.model.AnswerVariant;
 import pl.coderslab.driver.model.Question;
 import pl.coderslab.driver.repository.AdviceTestRepository;
-import pl.coderslab.driver.repository.AnswerVariantRepository;
-import pl.coderslab.driver.repository.QuestionRepository;
 
 import java.util.List;
 import java.util.Set;
@@ -21,13 +19,9 @@ import java.util.stream.Collectors;
 public class AdviceTestService {
 
     private final AdviceTestRepository testRepository;
-    private final QuestionRepository questionRepository;
-    private final AnswerVariantRepository answerRepository;
 
-    public AdviceTestService(AdviceTestRepository testRepository, QuestionRepository questionRepository, AnswerVariantRepository answerRepository) {
+    public AdviceTestService(AdviceTestRepository testRepository) {
         this.testRepository = testRepository;
-        this.questionRepository = questionRepository;
-        this.answerRepository = answerRepository;
     }
 
     public List<AdviceTestDto> getAll() {
