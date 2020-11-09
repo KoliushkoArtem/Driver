@@ -7,3 +7,6 @@ jdk:
 
 notifications:
   email: false
+
+script:
+  - mvn clean instal
