@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/KoliushkoArtem/Driver.svg?branch=main)](https://travis-ci.org/KoliushkoArtem/Driver)
 # Driver
 
 ## About Project
