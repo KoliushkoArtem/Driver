@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/KoliushkoArtem/Driver.svg?branch=main)](https://travis-ci.org/KoliushkoArtem/Driver)
+[![codecov](https://codecov.io/gh/KoliushkoArtem/Driver/branch/main/graph/badge.svg?token=SXV9HLG6DK)](https://codecov.io/gh/KoliushkoArtem/Driver)
 # Driver
 
 ## About Project
