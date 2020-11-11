@@ -6,8 +6,7 @@ services:
   - mysql
 
 script:
-  - mvn test -B
-  - mvn clean verify
+  - mvn clean verify -Djacoco.skip -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 
 env:
   global:
