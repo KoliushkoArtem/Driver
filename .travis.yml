@@ -16,7 +16,7 @@ env:
     - CODECOV_TOKEN=:02c06ba3-5bf3-4cd0-9a70-2459dc7c4e3d - token
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -f jacoco.xml
+  - bash <(curl -s https://codecov.io/bash) -f "target/site/jacoco/jacoco.xml"
 
 notifications:
   email: false
