@@ -6,8 +6,6 @@ services:
   - mysql
 
 script:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-  - mvn test -B
   - mvn clean verify
 
 after_success:
