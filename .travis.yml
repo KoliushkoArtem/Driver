@@ -6,6 +6,7 @@ services:
   - mysql
 
 script:
+  - mvn test -B
   - mvn clean verify
 
 after_success:
