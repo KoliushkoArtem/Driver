@@ -9,7 +9,7 @@ services:
   - mysql
 
 script:
-  - mvn clean verify -Djacoco.skip -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn clean verify
 
 env:
   global:
