@@ -148,6 +148,7 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -166,11 +167,6 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.6</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*DriverApplication.java</exclude>
-                    </excludes>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>
