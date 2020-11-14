@@ -50,8 +50,6 @@ class MediaFileDtoConverterTest {
 
         when(file.getBytes()).thenThrow(new IOException());
 
-        assertThrows(RuntimeException.class, () -> {
-            MediaFileDtoConverter.convertMultipartFileToMediaFile(file);
-        });
+        assertThrows(RuntimeException.class, () -> MediaFileDtoConverter.convertMultipartFileToMediaFile(file));
     }
 }

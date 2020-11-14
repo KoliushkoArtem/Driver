@@ -1,5 +1,6 @@
 package pl.coderslab.driver.converter;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import pl.coderslab.driver.dto.AnswerVariantDto;
 import pl.coderslab.driver.dto.QuestionDto;
@@ -16,33 +17,26 @@ class QuestionDtoConverterTest {
 
     private final Long id = 123L;
     private final String question = "Test Question";
-    private final Set<AnswerVariantDto> answersDto;
-    private final Set<AnswerVariant> answers;
+    private final Set<AnswerVariantDto> answersDto = new HashSet<>();
+    private final Set<AnswerVariant> answers = new HashSet<>();
 
-    QuestionDtoConverterTest() {
-        Set<AnswerVariantDto> answerVariantDtoSeed = new HashSet<>();
-        Set<AnswerVariant> answerVariantSeed = new HashSet<>();
-
+    @Before
+    public void setUp() {
+        AnswerVariantDto answerVariantDto = new AnswerVariantDto();
+        AnswerVariant answerVariant = new AnswerVariant();
         for (int i = 0; i < 5; i++) {
-            AnswerVariantDto answerVariantDto = new AnswerVariantDto();
             answerVariantDto.setId((long) i);
             answerVariantDto.setAnswer("Test Answer" + i);
             answerVariantDto.setMediaFileId((long) i);
             answerVariantDto.setVariantCorrect(Boolean.TRUE);
+            answersDto.add(answerVariantDto);
 
-            answerVariantDtoSeed.add(answerVariantDto);
-
-            AnswerVariant answerVariant = new AnswerVariant();
             answerVariant.setId((long) i);
             answerVariant.setAnswer("Test Answer" + i);
             answerVariant.setMediaFileId((long) i);
             answerVariant.setVariantCorrect(Boolean.TRUE);
-
-            answerVariantSeed.add(answerVariant);
+            answers.add(answerVariant);
         }
-
-        this.answersDto = answerVariantDtoSeed;
-        this.answers = answerVariantSeed;
     }
 
     @Test
