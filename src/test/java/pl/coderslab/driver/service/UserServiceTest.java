@@ -82,7 +82,7 @@ class UserServiceTest {
         when(userRepositoryMock.save(any())).thenReturn(testUser);
 
         UserDto userDtoToTest = userService.adminRegistration(testUserDto);
-        
+
         assertEquals(testUserDto, userDtoToTest);
         verify(emailServiceMock, times(1)).sendEmail(anyString(), anyString(), anyString());
     }
