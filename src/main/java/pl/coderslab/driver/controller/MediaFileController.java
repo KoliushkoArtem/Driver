@@ -43,19 +43,24 @@ public class MediaFileController {
     @Secured("ROLE_ADMIN")
     @PostMapping("/upload")
     @ApiOperation(value = "Upload media file")
-    public long uploadFileAndGetFileId(@RequestParam(name = "file") MultipartFile file) {
+    public ResponseEntity<Long> uploadFileAndGetFileId(@RequestParam(name = "file") MultipartFile file) {
         try {
-            return fileService.save(file).getId();
+            return ResponseEntity.ok(fileService.save(file).getId());
         } catch (RuntimeException e) {
-            return HttpStatus.BAD_REQUEST.value();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(400L);
         }
     }
 
     @Secured("ROLE_ADMIN")
     @PutMapping("/update/{id}")
     @ApiOperation(value = "Update media file by id")
-    public void updateFile(@RequestParam(name = "file") MultipartFile file, @PathVariable(name = "id") long id) {
-        fileService.update(file, id);
+    public HttpStatus updateFile(@RequestParam(name = "file") MultipartFile file, @PathVariable(name = "id") long id) {
+        try {
+            fileService.update(file, id);
+            return HttpStatus.OK;
+        } catch (RuntimeException e) {
+            return HttpStatus.BAD_REQUEST;
+        }
     }
 
     @Secured("ROLE_ADMIN")

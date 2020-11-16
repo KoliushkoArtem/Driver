@@ -1,6 +1,5 @@
 package pl.coderslab.driver.exceptions;
 
-
 import org.springframework.security.core.AuthenticationException;
 
 public class JwtAuthenticationException extends AuthenticationException {
