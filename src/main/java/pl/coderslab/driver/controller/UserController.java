@@ -86,7 +86,11 @@ public class UserController {
             return new ResponseEntity<>(new UserDto(), HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(userService.update(userDto));
+        try {
+            return ResponseEntity.ok(userService.update(userDto));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/delete/{id}")
