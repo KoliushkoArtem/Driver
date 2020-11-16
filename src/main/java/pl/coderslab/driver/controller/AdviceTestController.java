@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.driver.configuration.YamlUrlConfiguration;
 import pl.coderslab.driver.dto.AdviceTestDto;
+import pl.coderslab.driver.exceptions.AdviseTestNotFoundException;
 import pl.coderslab.driver.service.AdviceTestService;
 
 import java.util.List;
@@ -38,7 +39,11 @@ public class AdviceTestController {
     @GetMapping(value = "/get/{id}")
     @ApiOperation(value = "Get test by Id")
     public ResponseEntity<AdviceTestDto> getById(@PathVariable(name = "id") long testId) {
-        return ResponseEntity.ok(addMultiMediaDownloadUrl(testService.findByID(testId)));
+        try {
+            return ResponseEntity.ok(addMultiMediaDownloadUrl(testService.findByID(testId)));
+        } catch (AdviseTestNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Secured("ROLE_ADMIN")
@@ -52,7 +57,11 @@ public class AdviceTestController {
     @PutMapping("/update")
     @ApiOperation(value = "Update test")
     public ResponseEntity<AdviceTestDto> updateAdviceTest(@RequestBody AdviceTestDto testDto) {
-        return ResponseEntity.ok(addMultiMediaDownloadUrl(testService.update(testDto)));
+        try {
+            return ResponseEntity.ok(addMultiMediaDownloadUrl(testService.update(testDto)));
+        } catch (AdviseTestNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Secured("ROLE_ADMIN")

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.driver.dto.UserDto;
+import pl.coderslab.driver.exceptions.UserNotFoundException;
 import pl.coderslab.driver.service.UserService;
 
 import javax.validation.Valid;
@@ -51,7 +52,11 @@ public class UserController {
     @GetMapping("/get/{id}")
     @ApiOperation(value = "Get user by id")
     public ResponseEntity<UserDto> findById(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(userService.findById(id));
+        try {
+            return ResponseEntity.ok(userService.findById(id));
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping("/add/user")

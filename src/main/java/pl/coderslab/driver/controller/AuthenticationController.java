@@ -13,6 +13,7 @@ import pl.coderslab.driver.dto.AuthenticationRequestDto;
 import pl.coderslab.driver.dto.AuthenticationResponseDto;
 import pl.coderslab.driver.dto.PasswordChangingDto;
 import pl.coderslab.driver.exceptions.JwtAuthenticationException;
+import pl.coderslab.driver.exceptions.PasswordMismatchException;
 import pl.coderslab.driver.model.User;
 import pl.coderslab.driver.security.jwt.JwtTokenProvider;
 import pl.coderslab.driver.service.UserService;
@@ -57,13 +58,17 @@ public class AuthenticationController {
     @ApiOperation(value = "Currently logged user password changing. Password length 8-20, should contain at leas 1 digit/uppercase/lowercase. NO whitespaces allowed")
     public ResponseEntity<String> currentUserPasswordChanging(@RequestBody @Valid PasswordChangingDto passwordChangingDto,
                                                               HttpServletRequest request, BindingResult result) {
-        if (result.hasErrors()) {
-            return new ResponseEntity<>("Incorrect new password", HttpStatus.BAD_REQUEST);
-        } else {
-            String token = tokenProvider.resolveToken(request);
-            String username = tokenProvider.getUsername(token);
-            userService.passwordUpdate(username, passwordChangingDto);
-            return new ResponseEntity<>("Password successfully changed", HttpStatus.OK);
+        try {
+            if (result.hasErrors()) {
+                return new ResponseEntity<>("Incorrect new password", HttpStatus.BAD_REQUEST);
+            } else {
+                String token = tokenProvider.resolveToken(request);
+                String username = tokenProvider.getUsername(token);
+                userService.passwordUpdate(username, passwordChangingDto);
+                return new ResponseEntity<>("Password successfully changed", HttpStatus.OK);
+            }
+        } catch (PasswordMismatchException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }

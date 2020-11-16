@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.coderslab.driver.configuration.YamlUrlConfiguration;
 import pl.coderslab.driver.dto.AdviceDto;
+import pl.coderslab.driver.exceptions.AdviceNotFoundException;
 import pl.coderslab.driver.service.AdviceService;
 
 import java.util.List;
@@ -37,7 +38,11 @@ public class AdviceController {
     @GetMapping("/get/{id}")
     @ApiOperation(value = "Get advice by id")
     public ResponseEntity<AdviceDto> getAdviceById(@PathVariable(name = "id") long adviceId) {
-        return ResponseEntity.ok(addFileDownloadAndTestUrlsToAdvice(adviceService.findById(adviceId)));
+        try {
+            return ResponseEntity.ok(addFileDownloadAndTestUrlsToAdvice(adviceService.findById(adviceId)));
+        } catch (AdviceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/topOne")
@@ -57,7 +62,11 @@ public class AdviceController {
     @PutMapping("/update")
     @ApiOperation(value = "Update advice")
     public ResponseEntity<AdviceDto> updateAdvice(@RequestBody AdviceDto adviceDto) {
-        return ResponseEntity.ok(addFileDownloadAndTestUrlsToAdvice(adviceService.update(adviceDto)));
+        try {
+            return ResponseEntity.ok(addFileDownloadAndTestUrlsToAdvice(adviceService.update(adviceDto)));
+        } catch (AdviceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Secured("ROLE_ADMIN")

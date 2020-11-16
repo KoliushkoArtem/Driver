@@ -60,7 +60,7 @@ public class AdviceTestService {
     }
 
 
-    public AdviceTestDto update(AdviceTestDto testDto) {
+    public AdviceTestDto update(AdviceTestDto testDto) throws AdviseTestNotFoundException {
         AdviceTest testToUpdate = testRepository.findById(testDto.getId())
                 .orElseThrow(() -> new AdviseTestNotFoundException(testDto.getId()));
         AdviceTest testCandidate = TestDtoConverter.convertToAdviceTest(testDto);
