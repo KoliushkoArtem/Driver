@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -14,6 +13,7 @@ import pl.coderslab.driver.dto.AuthenticationResponseDto;
 import pl.coderslab.driver.dto.PasswordChangingDto;
 import pl.coderslab.driver.exceptions.JwtAuthenticationException;
 import pl.coderslab.driver.exceptions.PasswordMismatchException;
+import pl.coderslab.driver.exceptions.UserNotFoundException;
 import pl.coderslab.driver.model.User;
 import pl.coderslab.driver.security.jwt.JwtTokenProvider;
 import pl.coderslab.driver.service.UserService;
@@ -49,8 +49,8 @@ public class AuthenticationController {
             AuthenticationResponseDto responseDto = new AuthenticationResponseDto(username, token);
 
             return ResponseEntity.ok(responseDto);
-        } catch (JwtAuthenticationException e) {
-            throw new BadCredentialsException("Invalid username or password");
+        } catch (JwtAuthenticationException | UserNotFoundException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
