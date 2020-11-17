@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/KoliushkoArtem/Driver.svg?branch=main)](https://travis-ci.org/KoliushkoArtem/Driver)
 [![codecov](https://codecov.io/gh/KoliushkoArtem/Driver/branch/main/graph/badge.svg?token=SXV9HLG6DK)](https://codecov.io/gh/KoliushkoArtem/Driver)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 # Driver
 
 ## About Project
