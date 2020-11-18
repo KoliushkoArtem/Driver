@@ -6,7 +6,7 @@ coverage:
   precision: 2
   round: down
   Type: start...end
-  range: "70...100"
+  range: "65...70"
 
 parsers:
   gcov:
