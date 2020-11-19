@@ -17,7 +17,6 @@ env:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-  - cat codecov.yml | curl --data-binary @- https://codecov.io/validate
 
 notifications:
   email: false
