@@ -1,5 +1,4 @@
-shell:
-  cat codecov.yml | curl --data-binary @- https://codecov.io/validate
+cat codecov.yml | curl --data-binary @- https://codecov.io/validate
 
 codecov:
   require_ci_to_pass: true
