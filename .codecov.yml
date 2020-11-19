@@ -1,3 +1,5 @@
+curl -X POST --data-binary @codecov.yml https://codecov.io/validate
+
 codecov:
   require_ci_to_pass: true
   disable_default_path_fixes: false
