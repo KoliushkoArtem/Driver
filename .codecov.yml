@@ -1,15 +1,11 @@
-script:
-  - cat codecov.yml | curl --data-binary @- https://codecov.io/validate
-
 codecov:
   require_ci_to_pass: true
   disable_default_path_fixes: false
 
 coverage:
-  precision: 2
+  precision: 1
   round: down
-  Type: start...end
-  range: 65...70
+  range: "65...70"
 
 parsers:
   gcov:
