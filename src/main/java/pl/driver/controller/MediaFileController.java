@@ -47,7 +47,7 @@ public class MediaFileController {
         try {
             return ResponseEntity.ok(fileService.save(file).getId());
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(400L);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 

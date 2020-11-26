@@ -73,7 +73,7 @@ public class UserController {
     @ApiOperation(value = "Create admin")
     public ResponseEntity<UserDto> addAdmin(@RequestBody @Valid UserDto userDto, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new UserDto(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(userService.adminRegistration(userDto));
@@ -83,7 +83,7 @@ public class UserController {
     @ApiOperation(value = "Update user or admin")
     public ResponseEntity<UserDto> updateUser(@RequestBody @Valid UserDto userDto, BindingResult result) {
         if (result.hasErrors()) {
-            return new ResponseEntity<>(new UserDto(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().build();
         }
 
         try {
