@@ -101,7 +101,6 @@ public class UserService {
         return UserDtoConverter.convertToUserDto(userFromDb);
     }
 
-
     public UserDto update(UserDto userDto) throws UserNotFoundException {
         User userToUpdate = userRepository.findById(userDto.getId())
                 .orElseThrow(() -> new UserNotFoundException(userDto.getId()));
