@@ -18,4 +18,3 @@ public class MediaFile extends Auditable {
     @Lob
     private byte[] mediaFile;
 }
-

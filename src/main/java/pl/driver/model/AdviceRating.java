@@ -21,4 +21,3 @@ public class AdviceRating extends Auditable {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "rating")
     private Advice advice;
 }
-

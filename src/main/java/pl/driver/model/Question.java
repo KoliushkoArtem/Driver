@@ -16,5 +16,4 @@ public class Question extends Auditable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<AnswerVariant> answers;
-
 }

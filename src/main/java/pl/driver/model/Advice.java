@@ -15,7 +15,7 @@ public class Advice extends Auditable {
     @NotBlank(message = "Cannot be blank")
     private String name;
 
-    @NotBlank(message = "Advice")
+    @NotBlank(message = "Cannot be blank")
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
