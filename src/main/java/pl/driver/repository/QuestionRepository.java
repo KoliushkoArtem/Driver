@@ -6,4 +6,5 @@ import pl.driver.model.Question;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
+
 }

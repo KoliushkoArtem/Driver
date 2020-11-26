@@ -6,4 +6,5 @@ import pl.driver.model.AnswerVariant;
 
 @Repository
 public interface AnswerVariantRepository extends JpaRepository<AnswerVariant, Long> {
+
 }
