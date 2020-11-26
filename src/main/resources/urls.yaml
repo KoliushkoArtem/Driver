@@ -1,4 +1,3 @@
 urls:
   mediaFileDownloadUrl: http://localhost:8080/api/files/download/
   testUrl: http://localhost:8080/api/tests/get/
-
