@@ -1,7 +1,6 @@
 package pl.driver.security.jwt;
 
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,8 +27,11 @@ public class JwtTokenProvider {
 
     private static String secret = TOP_SECRET;
 
-    @Autowired
-    private DriverUserDetailsService userDetailsService;
+    private final DriverUserDetailsService userDetailsService;
+
+    public JwtTokenProvider(DriverUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
