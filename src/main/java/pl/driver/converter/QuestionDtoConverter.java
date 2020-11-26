@@ -21,7 +21,7 @@ public class QuestionDtoConverter {
 
     public static Question convertToQuestion(QuestionDto questionDto) {
         Question question = new Question();
-        if (questionDto.getId() != null) {
+        if (questionDto.getId() != null && questionDto.getId() != 0) {
             question.setId(questionDto.getId());
         }
         question.setQuestion(questionDto.getQuestion());

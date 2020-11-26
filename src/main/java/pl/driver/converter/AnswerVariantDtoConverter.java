@@ -17,7 +17,7 @@ public class AnswerVariantDtoConverter {
 
     public static AnswerVariant convertToAnswerVariant(AnswerVariantDto answerVariantDto) {
         AnswerVariant convertedAnswerVariant = new AnswerVariant();
-        if (answerVariantDto.getId() != null) {
+        if (answerVariantDto.getId() != null && answerVariantDto.getId() != 0) {
             convertedAnswerVariant.setId(answerVariantDto.getId());
         }
         convertedAnswerVariant.setAnswer(answerVariantDto.getAnswer());

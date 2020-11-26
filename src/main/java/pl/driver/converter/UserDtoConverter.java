@@ -18,7 +18,9 @@ public class UserDtoConverter {
 
     public static User convertToUser(UserDto userDto) {
         User user = new User();
-        user.setId(userDto.getId());
+        if (userDto.getId() != null && userDto.getId() != 0) {
+            user.setId(userDto.getId());
+        }
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setUsername(userDto.getUsername());

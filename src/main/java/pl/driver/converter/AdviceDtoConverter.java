@@ -6,7 +6,6 @@ import pl.driver.model.AdviceRating;
 
 public class AdviceDtoConverter {
 
-
     public static AdviceDto convertToAdviceDto(Advice advice) {
         AdviceDto convertedAdviceDto = new AdviceDto();
         convertedAdviceDto.setId(advice.getId());
@@ -21,7 +20,7 @@ public class AdviceDtoConverter {
 
     public static Advice convertToAdvice(AdviceDto adviceDto) {
         Advice convertedAdvice = new Advice();
-        if (adviceDto.getId() != null) {
+        if (adviceDto.getId() != null && adviceDto.getId() != 0) {
             convertedAdvice.setId(adviceDto.getId());
         }
         convertedAdvice.setName(adviceDto.getAdviceName());
@@ -30,7 +29,7 @@ public class AdviceDtoConverter {
         convertedAdvice.setRating(new AdviceRating());
         convertedAdvice.getRating().setLikeCount(adviceDto.getLikeCount());
         convertedAdvice.getRating().setDislikeCount(adviceDto.getDislikeCount());
-        if (adviceDto.getTestId() != null) {
+        if (adviceDto.getTestId() != null && adviceDto.getTestId() != 0) {
             convertedAdvice.setTestId(adviceDto.getTestId());
         }
 
