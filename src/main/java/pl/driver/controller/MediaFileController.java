@@ -15,7 +15,7 @@ import pl.driver.exceptions.MediaFileNotFoundException;
 import pl.driver.service.MediaFileService;
 
 @RestController
-@RequestMapping("/api/files")
+@RequestMapping(value = "/api/files", produces = "application/json")
 @Transactional
 public class MediaFileController {
 

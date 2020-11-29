@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(value = "/auth", produces = "application/json")
 @Transactional
 public class AuthenticationController {
 

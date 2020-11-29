@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/users")
+@RequestMapping(value = "/admin/users", produces = "application/json")
 @Transactional
 @ApiOperation(value = "Secured, only for admins")
 public class UserController {

@@ -15,7 +15,7 @@ import pl.driver.service.AdviceTestService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/tests")
+@RequestMapping(value = "/api/tests", produces = "application/json")
 @Transactional
 public class AdviceTestController {
 
