@@ -52,8 +52,10 @@ public class AdviceService {
         return updated;
     }
 
-    public void delete(long adviceId) {
-        adviceRepository.deleteById(adviceId);
+    public void delete(long adviceId) throws AdviceNotFoundException {
+        Advice adviceFromDb = adviceRepository.findById(adviceId).orElseThrow(() -> new AdviceNotFoundException(adviceId));
+
+        adviceRepository.delete(adviceFromDb);
 
         log.info("IN adviceService delete - advice with id: {} was successfully deleted", adviceId);
     }

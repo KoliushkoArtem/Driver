@@ -19,15 +19,15 @@ import static org.mockito.Mockito.*;
 @Slf4j
 class UserControllerTest {
 
-    private UserService userService;
+    private UserService userServiceMock;
     private UserController userController;
     private UserDto testUserDto;
     private List<UserDto> testUsersList;
 
     @BeforeEach
     void setUp(TestInfo testInfo) {
-        userService = mock(UserService.class);
-        userController = new UserController(userService);
+        userServiceMock = mock(UserService.class);
+        userController = new UserController(userServiceMock);
 
         testUserDto = new UserDto();
         testUserDto.setId(123L);
@@ -49,7 +49,7 @@ class UserControllerTest {
     @Test
     @DisplayName("When call getAll method assert List with UserDto and HTTP status OK")
     void getAll() {
-        when(userService.getAll()).thenReturn(testUsersList);
+        when(userServiceMock.getAll()).thenReturn(testUsersList);
 
         ResponseEntity<List<UserDto>> allUsersToTest = userController.getAll();
 
@@ -60,7 +60,7 @@ class UserControllerTest {
     @Test
     @DisplayName("When call getAllUsers method assert List with UserDto and HTTP status OK")
     void getAllUsers() {
-        when(userService.getAllUsers()).thenReturn(testUsersList);
+        when(userServiceMock.getAllUsers()).thenReturn(testUsersList);
 
         ResponseEntity<List<UserDto>> allUsersToTest = userController.getAllUsers();
 
@@ -71,7 +71,7 @@ class UserControllerTest {
     @Test
     @DisplayName("When call getAllAdmins method assert List with UserDto and HTTP status OK")
     void getAllAdmins() {
-        when(userService.getAllAdmins()).thenReturn(testUsersList);
+        when(userServiceMock.getAllAdmins()).thenReturn(testUsersList);
 
         ResponseEntity<List<UserDto>> allUsersToTest = userController.getAllAdmins();
 
@@ -82,7 +82,7 @@ class UserControllerTest {
     @Test
     @DisplayName("When call findById method with exist id assert ResponseEntity with UserDto and HTTP status OK")
     void findById() {
-        when(userService.findById(any())).thenReturn(testUserDto);
+        when(userServiceMock.findById(any())).thenReturn(testUserDto);
 
         ResponseEntity<UserDto> userByIdToTest = userController.findById(testUserDto.getId());
 
@@ -93,7 +93,7 @@ class UserControllerTest {
     @Test
     @DisplayName("When call findById method with not exist id assert ResponseEntity with HTTP status NOT_FOUND")
     void findByIdFail() {
-        when(userService.findById(any())).thenThrow(new UserNotFoundException(testUserDto.getId()));
+        when(userServiceMock.findById(any())).thenThrow(new UserNotFoundException(testUserDto.getId()));
 
         ResponseEntity<UserDto> userByIdToTest = userController.findById(testUserDto.getId());
 
@@ -105,7 +105,7 @@ class UserControllerTest {
     void addUser() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(false);
-        when(userService.userRegistration(any())).thenReturn(testUserDto);
+        when(userServiceMock.userRegistration(any())).thenReturn(testUserDto);
 
         ResponseEntity<UserDto> userByIdToTest = userController.addUser(testUserDto, testBindingResult);
 
@@ -118,7 +118,7 @@ class UserControllerTest {
     void addUserFailByBindingResultHasErrors() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(true);
-        when(userService.userRegistration(any())).thenReturn(testUserDto);
+        when(userServiceMock.userRegistration(any())).thenReturn(testUserDto);
 
         ResponseEntity<UserDto> userByIdToTest = userController.addUser(testUserDto, testBindingResult);
 
@@ -130,7 +130,7 @@ class UserControllerTest {
     void addAdmin() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(false);
-        when(userService.adminRegistration(any())).thenReturn(testUserDto);
+        when(userServiceMock.adminRegistration(any())).thenReturn(testUserDto);
 
         ResponseEntity<UserDto> userByIdToTest = userController.addAdmin(testUserDto, testBindingResult);
 
@@ -143,7 +143,7 @@ class UserControllerTest {
     void addAdminFailByBindingResultHasErrors() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(true);
-        when(userService.adminRegistration(any())).thenReturn(testUserDto);
+        when(userServiceMock.adminRegistration(any())).thenReturn(testUserDto);
 
         ResponseEntity<UserDto> userByIdToTest = userController.addAdmin(testUserDto, testBindingResult);
 
@@ -155,7 +155,7 @@ class UserControllerTest {
     void updateUserSuccess() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(false);
-        when(userService.update(any())).thenReturn(testUserDto);
+        when(userServiceMock.update(any())).thenReturn(testUserDto);
 
         ResponseEntity<UserDto> userByIdToTest = userController.updateUser(testUserDto, testBindingResult);
 
@@ -169,7 +169,7 @@ class UserControllerTest {
     void updateUserFailByUserNotFound() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(false);
-        when(userService.update(any())).thenThrow(new UserNotFoundException(testUserDto.getId()));
+        when(userServiceMock.update(any())).thenThrow(new UserNotFoundException(testUserDto.getId()));
 
         ResponseEntity<UserDto> userByIdToTest = userController.updateUser(testUserDto, testBindingResult);
 
@@ -187,10 +187,23 @@ class UserControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, userByIdToTest.getStatusCode());
     }
 
-    //TODO
     @Test
+    @DisplayName("When call delete method with exist id assert that delete method in UserService will be called 1 time and HTTP status OK")
     void delete() {
-        userController.delete(1L);
-        verify(userService, times(1)).delete(1L);
+        HttpStatus httpStatus = userController.delete(testUserDto.getId());
+
+        verify(userServiceMock, times(1)).delete(testUserDto.getId());
+        assertEquals(HttpStatus.OK, httpStatus);
+    }
+
+    @Test
+    @DisplayName("When call delete method with not exist id assert that delete method in UserService will throw UserNotFoundException and HTTP status NOT_FOUND")
+    void deleteFailByUserNotFoundException() {
+        doThrow(new UserNotFoundException(testUserDto.getId())).when(userServiceMock).delete(testUserDto.getId());
+
+        HttpStatus testHttpStatus = userController.delete(testUserDto.getId());
+
+        verify(userServiceMock, times(1)).delete(testUserDto.getId());
+        assertEquals(HttpStatus.NOT_FOUND, testHttpStatus);
     }
 }

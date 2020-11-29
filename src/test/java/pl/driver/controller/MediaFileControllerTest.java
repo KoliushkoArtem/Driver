@@ -116,10 +116,23 @@ class MediaFileControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, testHttpStatus);
     }
 
-    //TODO
     @Test
+    @DisplayName("When call delete method with exist id assert that delete method in MediaFileService will be called 1 time and HTTP status OK")
     void delete() {
-        mediaFileController.delete(1L);
-        verify(mediaFileServiceMok, times(1)).delete(1L);
+        HttpStatus httpStatus = mediaFileController.delete(testMediaFile.getId());
+
+        verify(mediaFileServiceMok, times(1)).delete(testMediaFile.getId());
+        assertEquals(HttpStatus.OK, httpStatus);
+    }
+
+    @Test
+    @DisplayName("When call delete method with not exist id assert that delete method in MediaFileService will throw MediaFileNotFoundException and HTTP status NOT_FOUND")
+    void deleteFailByMediaFileNotFoundException() {
+        doThrow(new MediaFileNotFoundException(testMediaFile.getId())).when(mediaFileServiceMok).delete(testMediaFile.getId());
+
+        HttpStatus testHttpStatus = mediaFileController.delete(testMediaFile.getId());
+
+        verify(mediaFileServiceMok, times(1)).delete(testMediaFile.getId());
+        assertEquals(HttpStatus.NOT_FOUND, testHttpStatus);
     }
 }

@@ -95,7 +95,12 @@ public class UserController {
 
     @DeleteMapping("/delete/{id}")
     @ApiOperation(value = "Delete user")
-    public void delete(@PathVariable(name = "id") Long id) {
-        userService.delete(id);
+    public HttpStatus delete(@PathVariable(name = "id") Long id) {
+        try {
+            userService.delete(id);
+            return HttpStatus.OK;
+        } catch (UserNotFoundException e) {
+            return HttpStatus.NOT_FOUND;
+        }
     }
 }

@@ -120,7 +120,10 @@ public class UserService {
     }
 
     public void delete(Long userId) {
-        userRepository.deleteById(userId);
+        User userFromDb = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+
+        userRepository.delete(userFromDb);
+
         log.info("IN userService delete - user: {} was successfully delete", userId);
     }
 

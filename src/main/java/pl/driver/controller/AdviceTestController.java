@@ -1,6 +1,7 @@
 package pl.driver.controller;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -67,13 +68,23 @@ public class AdviceTestController {
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/delete/{id}")
     @ApiOperation(value = "Delete test by id")
-    public void delete(@PathVariable(name = "id") long testId) {
-        testService.delete(testId);
+    public HttpStatus delete(@PathVariable(name = "id") long testId) {
+        try {
+            testService.delete(testId);
+            return HttpStatus.OK;
+        } catch (AdviseTestNotFoundException e) {
+            return HttpStatus.NOT_FOUND;
+        }
     }
 
     private AdviceTestDto addMultiMediaDownloadUrl(AdviceTestDto testDto) {
         testDto.getQuestions()
-                .forEach(q -> q.getAnswers().forEach(a -> a.setMediaFileDownloadLink(yamlUrlConfiguration.getMediaFileDownloadUrl(a.getMediaFileId()))));
+                .forEach(q -> q.getAnswers()
+                        .forEach(a -> {
+                            if (a.getMediaFileId() != null && a.getMediaFileId() != 0) {
+                                a.setMediaFileDownloadLink(yamlUrlConfiguration.getMediaFileDownloadUrl(a.getMediaFileId()));
+                            }
+                        }));
 
         return testDto;
     }

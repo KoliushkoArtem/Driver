@@ -129,10 +129,23 @@ class AdviceTestControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, updatedTestToTest.getStatusCode());
     }
 
-    //TODO
     @Test
+    @DisplayName("When call delete method with exist id assert delete method in AdviseTestService will be called 1 time and HTTP status OK")
     void delete() {
-        testController.delete(1L);
-        verify(testServiceMock, times(1)).delete(1L);
+        HttpStatus httpStatus = testController.delete(testDto.getId());
+
+        verify(testServiceMock, times(1)).delete(testDto.getId());
+        assertEquals(HttpStatus.OK, httpStatus);
+    }
+
+    @Test
+    @DisplayName("When call delete method with not exist id assert delete method wil be throw AdviseTestNotFoundException and HTTP status NOT_FOUND")
+    void deleteFailByAdviseTestNotFoundException() {
+        doThrow(new AdviseTestNotFoundException(testDto.getId())).when(testServiceMock).delete(testDto.getId());
+
+        HttpStatus httpStatus = testController.delete(testDto.getId());
+
+        verify(testServiceMock, times(1)).delete(testDto.getId());
+        assertEquals(HttpStatus.NOT_FOUND, httpStatus);
     }
 }

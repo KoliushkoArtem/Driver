@@ -97,11 +97,23 @@ class AdviceTestServiceTest {
         assertThrows(AdviseTestNotFoundException.class, () -> testService.findByID(test.getId()));
     }
 
-    //TODO
     @Test
+    @DisplayName("When call delete method with exist id assert that at AdviceTestRepository will be called findDyId and delete methods one time each")
     void delete() {
-        testService.delete(1L);
-        verify(testRepositoryMock, times(1)).deleteById(1L);
+        when(testRepositoryMock.findById(test.getId())).thenReturn(Optional.ofNullable(test));
+
+        testService.delete(test.getId());
+
+        verify(testRepositoryMock, times(1)).delete(test);
+        verify(testRepositoryMock, times(1)).findById(test.getId());
+    }
+
+    @Test
+    @DisplayName("When call delete method with not exist id assert that AdviseTestNotFoundException will be thrown")
+    void AdviseTestNotFoundException() {
+        when(testRepositoryMock.findById(test.getId())).thenReturn(Optional.empty());
+
+        assertThrows(AdviseTestNotFoundException.class, () -> testService.delete(testDto.getId()));
     }
 
     @Test

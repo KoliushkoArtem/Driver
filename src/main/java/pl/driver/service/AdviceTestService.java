@@ -44,8 +44,11 @@ public class AdviceTestService {
         return TestDtoConverter.convertToAdviceTestDto(testFromDb);
     }
 
-    public void delete(long testId) {
-        testRepository.deleteById(testId);
+    public void delete(long testId) throws AdviseTestNotFoundException {
+        AdviceTest testFromDb = testRepository.findById(testId)
+                .orElseThrow(() -> new AdviseTestNotFoundException(testId));
+
+        testRepository.delete(testFromDb);
 
         log.info("IN adviceTestService delete - tests with Id: {} was deleted", testId);
     }

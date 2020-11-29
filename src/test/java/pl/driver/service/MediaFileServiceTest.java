@@ -96,10 +96,22 @@ class MediaFileServiceTest {
         assertThrows(MediaFileNotFoundException.class, () -> mediaFileService.update(fileMock, testMediaFile.getId()));
     }
 
-    //TODO
     @Test
+    @DisplayName("When call delete method with exist id assert that at MediaFileRepository will be called findDyId and delete methods one time each")
     void delete() {
-        mediaFileService.delete(1L);
-        verify(mediaFileRepositoryMock, times(1)).deleteById(1L);
+        when(mediaFileRepositoryMock.findById(testMediaFile.getId())).thenReturn(Optional.ofNullable(testMediaFile));
+
+        mediaFileService.delete(testMediaFile.getId());
+
+        verify(mediaFileRepositoryMock, times(1)).findById(testMediaFile.getId());
+        verify(mediaFileRepositoryMock, times(1)).delete(testMediaFile);
+    }
+
+    @Test
+    @DisplayName("When call delete method with not exist id assert that MediaFileNotFoundException ill be thrown")
+    void deleteFailByMediaFileNotFoundException() {
+        when(mediaFileRepositoryMock.findById(any())).thenReturn(Optional.empty());
+
+        assertThrows(MediaFileNotFoundException.class, () -> mediaFileService.delete(testMediaFile.getId()));
     }
 }

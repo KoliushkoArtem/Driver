@@ -66,7 +66,12 @@ public class MediaFileController {
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/delete/{id}")
     @ApiOperation(value = "Delete media file by id")
-    public void delete(@PathVariable(name = "id") long fileId) {
-        fileService.delete(fileId);
+    public HttpStatus delete(@PathVariable(name = "id") long fileId) {
+        try {
+            fileService.delete(fileId);
+            return HttpStatus.OK;
+        } catch (MediaFileNotFoundException e) {
+            return HttpStatus.NOT_FOUND;
+        }
     }
 }

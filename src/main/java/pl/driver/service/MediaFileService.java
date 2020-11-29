@@ -47,8 +47,10 @@ public class MediaFileService {
         log.info("IN mediaFileService update - mediaFile with Id: {} vas updated", id);
     }
 
-    public void delete(long id) {
-        mediaFileRepository.deleteById(id);
+    public void delete(long id) throws MediaFileNotFoundException {
+        MediaFile fileFromRepo = mediaFileRepository.findById(id).orElseThrow(() -> new MediaFileNotFoundException(id));
+
+        mediaFileRepository.delete(fileFromRepo);
 
         log.info("IN mediaFileService delete - mediaFile with id: {} vas deleted", id);
     }

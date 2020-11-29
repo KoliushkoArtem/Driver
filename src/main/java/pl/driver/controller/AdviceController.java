@@ -1,6 +1,7 @@
 package pl.driver.controller;
 
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,13 +73,23 @@ public class AdviceController {
     @Secured("ROLE_ADMIN")
     @DeleteMapping("/delete/{id}")
     @ApiOperation(value = "Delete advice by id")
-    public void deleteAdvice(@PathVariable(name = "id") long adviceId) {
-        adviceService.delete(adviceId);
+    public HttpStatus deleteAdvice(@PathVariable(name = "id") long adviceId) {
+        try {
+            adviceService.delete(adviceId);
+            return HttpStatus.OK;
+        } catch (AdviceNotFoundException e) {
+            return HttpStatus.NOT_FOUND;
+        }
     }
 
     private AdviceDto addFileDownloadAndTestUrlsToAdvice(AdviceDto adviceDto) {
-        adviceDto.setMediaFileDownloadLink(yamlUrlConfiguration.getMediaFileDownloadUrl(adviceDto.getMediaFileId()));
-        adviceDto.setTestLink(yamlUrlConfiguration.getTestUrl(adviceDto.getTestId()));
+        if (adviceDto.getMediaFileId() != null && adviceDto.getMediaFileId() != 0) {
+            adviceDto.setMediaFileDownloadLink(yamlUrlConfiguration.getMediaFileDownloadUrl(adviceDto.getMediaFileId()));
+        }
+
+        if (adviceDto.getTestId() != null && adviceDto.getTestId() != 0) {
+            adviceDto.setTestLink(yamlUrlConfiguration.getTestUrl(adviceDto.getTestId()));
+        }
 
         return adviceDto;
     }

@@ -197,12 +197,23 @@ class UserServiceTest {
         assertThrows(UserNotFoundException.class, () -> userService.update(testUserDto));
     }
 
-    //TODO
     @Test
+    @DisplayName("When call delete method with exist id assert that at UserRepository will be called findDyId and delete methods one time each")
     void delete() {
-        userService.delete(1L);
+        when(userRepositoryMock.findById(testUser.getId())).thenReturn(Optional.ofNullable(testUser));
 
-        verify(userRepositoryMock, times(1)).deleteById(1L);
+        userService.delete(testUser.getId());
+
+        verify(userRepositoryMock, times(1)).findById(testUser.getId());
+        verify(userRepositoryMock, times(1)).delete(testUser);
+    }
+
+    @Test
+    @DisplayName("When call delete method with not exist id assert that UserNotFoundException will be thrown ")
+    void deleteFailByUserNotFoundException() {
+        when(userRepositoryMock.findById(testUser.getId())).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.delete(testUser.getId()));
     }
 
     @Test
