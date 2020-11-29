@@ -1,7 +1,8 @@
 package pl.driver.converter;
 
 
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import pl.driver.dto.MediaFileDto;
@@ -13,13 +14,25 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@Slf4j
 class MediaFileDtoConverterTest {
 
     private final String name = "Test File Name";
     private final String contentType = ".jpg";
     private final byte[] mediaFile = "Test Byte Array".getBytes();
 
+    @BeforeEach
+    void setUp(TestInfo testInfo) {
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
+    }
+
     @Test
+    @DisplayName("When call convertToMediaFileDto method assert that all similar fields would be an equals in incoming MediaFile and outputted MediaFileDto")
     void convertToMediaFileDto() {
         MediaFile file = new MediaFile();
         file.setName(name);
@@ -34,6 +47,7 @@ class MediaFileDtoConverterTest {
     }
 
     @Test
+    @DisplayName("When call convertToMediaFile method assert that all similar fields would be an equals in incoming MediaFileDto and outputted MediaFile")
     void convertMultipartFileToMediaFile() {
         MockMultipartFile file = new MockMultipartFile(name, name, contentType, mediaFile);
 
@@ -45,6 +59,7 @@ class MediaFileDtoConverterTest {
     }
 
     @Test
+    @DisplayName("When call convertMultipartFileToMediaFile method with damaged file assert that RuntimeException will be thrown")
     void convertMultipartFileToMediaFileExceptionCheck() throws IOException {
         MultipartFile file = mock(MultipartFile.class);
 

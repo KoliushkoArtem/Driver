@@ -1,7 +1,7 @@
 package pl.driver.controller;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.driver.configuration.YamlUrlConfiguration;
@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 class AdviceControllerTest {
 
     private final String mediaFileDownloadUrl = "mediaFileUrl";
@@ -26,7 +27,7 @@ class AdviceControllerTest {
     private AdviceDto testAdviceDto;
 
     @BeforeEach
-    void setUp() {
+    void setUp(TestInfo testInfo) {
         adviceServiceMock = mock(AdviceService.class);
         YamlUrlConfiguration yamlUrlConfiguration = new YamlUrlConfiguration();
         yamlUrlConfiguration.setMediaFileDownloadUrl(mediaFileDownloadUrl);
@@ -41,9 +42,17 @@ class AdviceControllerTest {
         testAdviceDto.setTestId(231L);
         testAdviceDto.setLikeCount(50);
         testAdviceDto.setDislikeCount(10);
+
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
     }
 
     @Test
+    @DisplayName("When call getAllAdvices method asserted ResponseEntity with List of AdviseDto and HTTP status OK")
     void getAllAdvices() {
         AdviceDto[] adviceArray = new AdviceDto[]{testAdviceDto};
         when(adviceServiceMock.getAll()).thenReturn(Arrays.asList(adviceArray));
@@ -56,6 +65,7 @@ class AdviceControllerTest {
     }
 
     @Test
+    @DisplayName("When call getAdviceById method with exist id asserted Response entity with AdviceDto with correct id and set mediaFileDownloadUrl and adviceTestUrl")
     void getAdviceByIdSuccess() {
         when(adviceServiceMock.findById(testAdviceDto.getId())).thenReturn(testAdviceDto);
 
@@ -69,6 +79,7 @@ class AdviceControllerTest {
     }
 
     @Test
+    @DisplayName("When call getAdviceById method with not exist id asserted ResponseEntity with HTTP status NOT_FOUND")
     void getAdviceByIdFailByUserNotFoundException() {
         when(adviceServiceMock.findById(testAdviceDto.getId())).thenThrow(new AdviceNotFoundException(testAdviceDto.getId()));
 
@@ -78,6 +89,7 @@ class AdviceControllerTest {
     }
 
     @Test
+    @DisplayName("When call getAdviceByRatingForLast7Days method asserted ResponseEntity with AdviceDto and HTTP status OK")
     void getAdviceByRatingForLast7Days() {
         when(adviceServiceMock.getAdviceByRatingForLast7Days()).thenReturn(testAdviceDto);
 
@@ -88,6 +100,7 @@ class AdviceControllerTest {
     }
 
     @Test
+    @DisplayName("When call addAdvice method asserted ResponseEntity with saved AdviceDto with set mediaFileDownloadUrl and adviceTestUrl and HTTP status OK")
     void addAdvice() {
         when(adviceServiceMock.save(testAdviceDto)).thenReturn(testAdviceDto);
 
@@ -95,10 +108,12 @@ class AdviceControllerTest {
 
         assertEquals(HttpStatus.OK, adviceByIdToTest.getStatusCode());
         assertNotNull(Objects.requireNonNull(adviceByIdToTest.getBody()).getMediaFileDownloadLink());
+        assertNotNull(Objects.requireNonNull(adviceByIdToTest.getBody()).getTestLink());
 
     }
 
     @Test
+    @DisplayName("When call updateAdvice method wit exist advise assert ResponseEntity with updated AdviseDto and HTTP status OK")
     void updateAdvice() {
         when(adviceServiceMock.update(testAdviceDto)).thenReturn(testAdviceDto);
 
@@ -109,6 +124,7 @@ class AdviceControllerTest {
     }
 
     @Test
+    @DisplayName("When call updateAdvice method wit not exist advise assert ResponseEntity with HTTP status NOT_FOUND")
     void updateAdviceFailByUserNotFoundException() {
         when(adviceServiceMock.update(testAdviceDto)).thenThrow(new AdviceNotFoundException(testAdviceDto.getId()));
 
@@ -117,6 +133,7 @@ class AdviceControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, adviceByIdToTest.getStatusCode());
     }
 
+    //TODO
     @Test
     void deleteAdvice() {
         adviceController.deleteAdvice(1L);

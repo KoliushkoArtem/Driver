@@ -1,7 +1,7 @@
 package pl.driver.controller;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 class UserControllerTest {
 
     private UserService userService;
@@ -24,7 +25,7 @@ class UserControllerTest {
     private List<UserDto> testUsersList;
 
     @BeforeEach
-    void setUp() {
+    void setUp(TestInfo testInfo) {
         userService = mock(UserService.class);
         userController = new UserController(userService);
 
@@ -36,9 +37,17 @@ class UserControllerTest {
         testUserDto.setUsername("Username");
 
         testUsersList = Collections.singletonList(testUserDto);
+
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
     }
 
     @Test
+    @DisplayName("When call getAll method assert List with UserDto and HTTP status OK")
     void getAll() {
         when(userService.getAll()).thenReturn(testUsersList);
 
@@ -49,6 +58,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call getAllUsers method assert List with UserDto and HTTP status OK")
     void getAllUsers() {
         when(userService.getAllUsers()).thenReturn(testUsersList);
 
@@ -59,6 +69,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call getAllAdmins method assert List with UserDto and HTTP status OK")
     void getAllAdmins() {
         when(userService.getAllAdmins()).thenReturn(testUsersList);
 
@@ -69,6 +80,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call findById method with exist id assert ResponseEntity with UserDto and HTTP status OK")
     void findById() {
         when(userService.findById(any())).thenReturn(testUserDto);
 
@@ -79,6 +91,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call findById method with not exist id assert ResponseEntity with HTTP status NOT_FOUND")
     void findByIdFail() {
         when(userService.findById(any())).thenThrow(new UserNotFoundException(testUserDto.getId()));
 
@@ -88,6 +101,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call addUser method with BindingResult has no errors assert ResponseEntity with saved UserDto and HTTP status OK")
     void addUser() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(false);
@@ -100,6 +114,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call addUser method with BindingResult has errors assert ResponseEntity with HTTP status BAD_REQUEST")
     void addUserFailByBindingResultHasErrors() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(true);
@@ -111,6 +126,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call addAdmin method with BindingResult has no errors assert ResponseEntity with saved UserDto and HTTP status OK")
     void addAdmin() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(false);
@@ -123,6 +139,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call addAdmin method with BindingResult has errors assert ResponseEntity with HTTP status BAD_REQUEST")
     void addAdminFailByBindingResultHasErrors() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(true);
@@ -134,6 +151,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call updateUser method with BindingResult has no errors and exist user assert ResponseEntity with saved UserDto and HTTP status OK")
     void updateUserSuccess() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(false);
@@ -147,6 +165,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call updateUser method with BindingResult has no errors but not exist user assert ResponseEntity with HTTP status NOT_FOUND")
     void updateUserFailByUserNotFound() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(false);
@@ -158,6 +177,7 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("When call updateUser method with BindingResult has errors but exist user assert ResponseEntity with HTTP status BAD_REQUEST")
     void updateUserFailByBindingResultHasErrors() {
         BindingResult testBindingResult = mock(BindingResult.class);
         when(testBindingResult.hasErrors()).thenReturn(true);
@@ -167,6 +187,7 @@ class UserControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, userByIdToTest.getStatusCode());
     }
 
+    //TODO
     @Test
     void delete() {
         userController.delete(1L);

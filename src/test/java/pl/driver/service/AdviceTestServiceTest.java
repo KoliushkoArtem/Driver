@@ -1,7 +1,7 @@
 package pl.driver.service;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import pl.driver.converter.TestDtoConverter;
 import pl.driver.dto.AdviceTestDto;
 import pl.driver.exceptions.AdviseTestNotFoundException;
@@ -15,6 +15,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 class AdviceTestServiceTest {
 
     private AdviceTestRepository testRepositoryMock;
@@ -24,7 +25,7 @@ class AdviceTestServiceTest {
 
 
     @BeforeEach
-    void setUp() {
+    void setUp(TestInfo testInfo) {
         testRepositoryMock = mock(AdviceTestRepository.class);
         testService = new AdviceTestService(testRepositoryMock);
 
@@ -56,9 +57,17 @@ class AdviceTestServiceTest {
         test.setQuestions(testQuestions);
 
         testDto = TestDtoConverter.convertToAdviceTestDto(test);
+
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
     }
 
     @Test
+    @DisplayName("When call getAll method assert that received from DB List of AdviceTests will be converted to AdviseTestDto and returned List of AdviceTestDto")
     void getAll() {
         AdviceTest[] tests = new AdviceTest[]{test};
         List<AdviceTest> testList = Arrays.asList(tests);
@@ -71,6 +80,7 @@ class AdviceTestServiceTest {
     }
 
     @Test
+    @DisplayName("When call findById method with exist id assert that AdviceTest from DB will be converted to AdviceTestDto and returned")
     void findByID() {
         when(testRepositoryMock.findById(any())).thenReturn(Optional.ofNullable(test));
 
@@ -80,12 +90,14 @@ class AdviceTestServiceTest {
     }
 
     @Test
+    @DisplayName("when call findById method with no exist id assert that AdviceTestNotFoundException will be thrown")
     void findByIDFail() {
         when(testRepositoryMock.findById(any())).thenReturn(Optional.empty());
 
         assertThrows(AdviseTestNotFoundException.class, () -> testService.findByID(test.getId()));
     }
 
+    //TODO
     @Test
     void delete() {
         testService.delete(1L);
@@ -93,6 +105,7 @@ class AdviceTestServiceTest {
     }
 
     @Test
+    @DisplayName("When call save method with AdviceTestDto asserted that AdviceTestDto will be converted to AdviceTest and saved, then saved AdviseTest converted to AdviseTestDto and returned")
     void save() {
         when(testRepositoryMock.save(any())).thenReturn(test);
 
@@ -102,6 +115,7 @@ class AdviceTestServiceTest {
     }
 
     @Test
+    @DisplayName("When call update method with exist AdviceTestDto asserted that AdviceTestDto will be converted to AdviceTest and updated, then saved AdviseTest converted to AdviseTestDto and returned")
     void update() {
 
         AnswerVariant newAnswer = new AnswerVariant();
@@ -131,6 +145,7 @@ class AdviceTestServiceTest {
     }
 
     @Test
+    @DisplayName("When call update method with not exist AdviceTestDto asserted that AdviceTestNotFoundException will be thrown")
     void updateFail() {
         when(testRepositoryMock.findById(any())).thenReturn(Optional.empty());
 

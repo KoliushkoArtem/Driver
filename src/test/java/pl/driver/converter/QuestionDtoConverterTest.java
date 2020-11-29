@@ -1,7 +1,8 @@
 package pl.driver.converter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import pl.driver.dto.AnswerVariantDto;
 import pl.driver.dto.QuestionDto;
 import pl.driver.model.AnswerVariant;
@@ -13,6 +14,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Slf4j
 class QuestionDtoConverterTest {
 
     private final Long id = 123L;
@@ -39,7 +41,19 @@ class QuestionDtoConverterTest {
         }
     }
 
+    @BeforeEach
+    void setUp(TestInfo testInfo) {
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
+    }
+
+
     @Test
+    @DisplayName("When call convertToQuestionDto method assert that all similar fields would be an equals in incoming Question and outputted QuestionDto")
     void convertToQuestionDto() {
         Question questionT = new Question();
         questionT.setId(id);
@@ -55,6 +69,7 @@ class QuestionDtoConverterTest {
     }
 
     @Test
+    @DisplayName("When call convertToQuestion method assert that all similar fields would be an equals in incoming QuestionDto and outputted Question")
     void convertToQuestion() {
         QuestionDto questionDto = new QuestionDto();
         questionDto.setId(id);

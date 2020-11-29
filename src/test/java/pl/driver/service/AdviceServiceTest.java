@@ -1,7 +1,7 @@
 package pl.driver.service;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import pl.driver.converter.AdviceDtoConverter;
 import pl.driver.dto.AdviceDto;
 import pl.driver.exceptions.AdviceNotFoundException;
@@ -16,6 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 class AdviceServiceTest {
 
     private AdviceRepository adviceRepositoryMock;
@@ -24,7 +25,7 @@ class AdviceServiceTest {
     private AdviceDto testAdviceDto;
 
     @BeforeEach
-    void setUp() {
+    void setUp(TestInfo testInfo) {
         adviceRepositoryMock = mock(AdviceRepository.class);
         adviceService = new AdviceService(adviceRepositoryMock);
 
@@ -41,9 +42,17 @@ class AdviceServiceTest {
         testAdvice.setRating(rating);
 
         testAdviceDto = AdviceDtoConverter.convertToAdviceDto(testAdvice);
+
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
     }
 
     @Test
+    @DisplayName("When call getAll method assert that received from DB List of Advices will be converted to AdviseDto and returned List of AdviceDto")
     void getAll() {
         Advice[] adviceArray = new Advice[]{testAdvice};
         when(adviceRepositoryMock.findAll()).thenReturn(Arrays.asList(adviceArray));
@@ -55,6 +64,7 @@ class AdviceServiceTest {
     }
 
     @Test
+    @DisplayName("When call save method with AdviceDto asserted that AdviceDto will be converted to Advice and saved, then saved Advise converted to AdviseDto and returned")
     void save() {
         when(adviceRepositoryMock.save(any())).thenReturn(testAdvice);
 
@@ -64,6 +74,7 @@ class AdviceServiceTest {
     }
 
     @Test
+    @DisplayName("When call update method with exist AdviceDto asserted that AdviceDto will be converted to Advice and updated, then saved Advise converted to AdviseDto and returned")
     void update() {
         when(adviceRepositoryMock.findById(testAdvice.getId())).thenReturn(Optional.ofNullable(testAdvice));
         when(adviceRepositoryMock.save(testAdvice)).thenReturn(testAdvice);
@@ -74,12 +85,14 @@ class AdviceServiceTest {
     }
 
     @Test
+    @DisplayName("When call update method with not exist AdviceDto asserted that AdviceNotFoundException will be thrown")
     void updateExceptionCall() {
         when(adviceRepositoryMock.findById(any())).thenReturn(Optional.empty());
 
         assertThrows(AdviceNotFoundException.class, () -> adviceService.update(testAdviceDto));
     }
 
+    //TODO
     @Test
     void delete() {
         adviceService.delete(1L);
@@ -87,6 +100,7 @@ class AdviceServiceTest {
     }
 
     @Test
+    @DisplayName("When call findById method with exist id assert that Advice from DB will be converted to AdviceDto and returned")
     void findByIdSuccess() {
         when(adviceRepositoryMock.findById(any())).thenReturn(Optional.ofNullable(testAdvice));
 
@@ -96,6 +110,7 @@ class AdviceServiceTest {
     }
 
     @Test
+    @DisplayName("when call findById method with no exist id assert that AdviceNotFoundException will be thrown")
     void findByIdFail() {
         when(adviceRepositoryMock.findById(any())).thenReturn(Optional.empty());
 
@@ -103,6 +118,7 @@ class AdviceServiceTest {
     }
 
     @Test
+    @DisplayName("When call getAdviceByRatingForLast7Days method assert that Advice from DB will be converted to AdviceDto and returned")
     void getAdviceByRatingForLast7Days() {
         when(adviceRepositoryMock.findFirstByRatingForLast7Days()).thenReturn(testAdvice);
 

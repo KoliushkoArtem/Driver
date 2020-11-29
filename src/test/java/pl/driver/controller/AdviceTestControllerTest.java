@@ -1,11 +1,10 @@
 package pl.driver.controller;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.driver.configuration.YamlUrlConfiguration;
-import pl.driver.controller.AdviceTestController;
 import pl.driver.dto.AdviceTestDto;
 import pl.driver.dto.AnswerVariantDto;
 import pl.driver.dto.QuestionDto;
@@ -14,9 +13,10 @@ import pl.driver.service.AdviceTestService;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 class AdviceTestControllerTest {
 
     private AdviceTestService testServiceMock;
@@ -24,7 +24,7 @@ class AdviceTestControllerTest {
     private AdviceTestDto testDto;
 
     @BeforeEach
-    void setUp() {
+    void setUp(TestInfo testInfo) {
         testServiceMock = mock(AdviceTestService.class);
         testController = new AdviceTestController(new YamlUrlConfiguration(), testServiceMock);
 
@@ -54,9 +54,17 @@ class AdviceTestControllerTest {
             testQuestions.add(questionDto);
         }
         testDto.setQuestions(testQuestions);
+
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
     }
 
     @Test
+    @DisplayName("When call getAllTests method asserted ResponseEntity with List of AdviseTestDto and HTTP status OK")
     void getAllTests() {
         AdviceTestDto[] adviceTestDto = new AdviceTestDto[]{testDto};
         when(testServiceMock.getAll()).thenReturn(Arrays.asList(adviceTestDto));
@@ -69,6 +77,7 @@ class AdviceTestControllerTest {
     }
 
     @Test
+    @DisplayName("When call getById method with exist id assert ResponseEntity with AdviceTestDto and HTTP status OK")
     void getByIdSuccess() {
         when(testServiceMock.findByID(testDto.getId())).thenReturn(testDto);
 
@@ -79,6 +88,7 @@ class AdviceTestControllerTest {
     }
 
     @Test
+    @DisplayName("When call getById method with not exist id assert ResponseEntity with HTTP status NOT_FOUND")
     void getByIdFailByTestNotFoundException() {
         when(testServiceMock.findByID(testDto.getId())).thenThrow(new AdviseTestNotFoundException(testDto.getId()));
 
@@ -88,6 +98,7 @@ class AdviceTestControllerTest {
     }
 
     @Test
+    @DisplayName("When Call add method assert ResponseEntity with AdviseTestDto and HTTP status OK")
     void add() {
         when(testServiceMock.save(testDto)).thenReturn(testDto);
 
@@ -98,6 +109,7 @@ class AdviceTestControllerTest {
     }
 
     @Test
+    @DisplayName("When call updateAdviceTest method with exist test assert ResponseEntity with updated AdviceTestDto and HTTP status OK")
     void updateAdviceTestSuccess() {
         when(testServiceMock.update(testDto)).thenReturn(testDto);
 
@@ -108,6 +120,7 @@ class AdviceTestControllerTest {
     }
 
     @Test
+    @DisplayName("When call updateAdviceTest method with not exist test assert ResponseEntity with HTTP status NOT_FOUND")
     void updateAdviceTestFailByTeatNotFoundException() {
         when(testServiceMock.update(testDto)).thenThrow(new AdviseTestNotFoundException(testDto.getId()));
 
@@ -116,6 +129,7 @@ class AdviceTestControllerTest {
         assertEquals(HttpStatus.NOT_FOUND, updatedTestToTest.getStatusCode());
     }
 
+    //TODO
     @Test
     void delete() {
         testController.delete(1L);

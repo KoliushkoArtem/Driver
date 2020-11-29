@@ -1,7 +1,8 @@
 package pl.driver.converter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import pl.driver.dto.AdviceTestDto;
 import pl.driver.dto.QuestionDto;
 import pl.driver.model.AdviceTest;
@@ -13,6 +14,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Slf4j
 class TestDtoConverterTest {
 
     private final Long id = 123L;
@@ -36,7 +38,18 @@ class TestDtoConverterTest {
         }
     }
 
+    @BeforeEach
+    void setUp(TestInfo testInfo) {
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
+    }
+
     @Test
+    @DisplayName("When call convertToAdviceTestDto method assert that all similar fields would be an equals in incoming AdviceTest and outputted AdviceTestDto")
     void convertToAdviceTestDto() {
         AdviceTest adviceTest = new AdviceTest();
         adviceTest.setId(id);
@@ -54,6 +67,7 @@ class TestDtoConverterTest {
     }
 
     @Test
+    @DisplayName("When call convertToAdviceTest method assert that all similar fields would be an equals in incoming AdviceTestDto and outputted AdviceTest")
     void convertToAdviceTest() {
         AdviceTestDto adviceTestDto = new AdviceTestDto();
         adviceTestDto.setId(id);

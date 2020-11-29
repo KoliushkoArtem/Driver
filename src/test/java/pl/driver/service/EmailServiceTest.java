@@ -1,24 +1,33 @@
 package pl.driver.service;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import static org.mockito.Mockito.*;
 
+@Slf4j
 class EmailServiceTest {
 
     private JavaMailSender mailSenderMock;
     private EmailService emailService;
 
     @BeforeEach
-    void setUp() {
+    void setUp(TestInfo testInfo) {
         mailSenderMock = mock(JavaMailSender.class);
         emailService = new EmailService(mailSenderMock);
+
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
     }
 
     @Test
+    @DisplayName("When call sendEmail method assert that method will be called 1 time")
     void sendEmail() {
         String to = "TO";
         String subject = "SUBJECT";

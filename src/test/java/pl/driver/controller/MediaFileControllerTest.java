@@ -1,7 +1,7 @@
 package pl.driver.controller;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,7 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@Slf4j
 class MediaFileControllerTest {
 
     private MediaFileService mediaFileServiceMok;
@@ -28,7 +29,7 @@ class MediaFileControllerTest {
 
 
     @BeforeEach
-    void setUp() {
+    void setUp(TestInfo testInfo) {
         mediaFileServiceMok = mock(MediaFileService.class);
         multipartFileMok = new MockMultipartFile("TestName", "TestFulName", ".jpg/IMAGE", "Test Byte Array".getBytes());
         mediaFileController = new MediaFileController(mediaFileServiceMok);
@@ -36,9 +37,17 @@ class MediaFileControllerTest {
         testMediaFile = MediaFileDtoConverter.convertMultipartFileToMediaFile(multipartFileMok);
         testMediaFile.setId(123L);
         testMediaFileDto = MediaFileDtoConverter.convertToMediaFileDto(testMediaFile);
+
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
     }
 
     @Test
+    @DisplayName("When call downloadFile method with exist media file id assert ResponseEntity with ByteArrayResource and HTTP status OK")
     void downloadFile() {
         when(mediaFileServiceMok.getById(1L)).thenReturn(testMediaFileDto);
 
@@ -49,6 +58,7 @@ class MediaFileControllerTest {
     }
 
     @Test
+    @DisplayName("When call downloadFile method with not exist media file id assert ResponseEntity with HTTP status NOT_FOUND")
     void downloadFileFailByMediaFileNotFoundException() {
         when(mediaFileServiceMok.getById(testMediaFile.getId())).thenThrow(new MediaFileNotFoundException(testMediaFile.getId()));
 
@@ -58,6 +68,7 @@ class MediaFileControllerTest {
     }
 
     @Test
+    @DisplayName("When call uploadFileAndGetFileId with not damaged file asserted ResponseEntity with uploaded file id and HTTP status OK")
     void uploadFileAndGetFileId() {
         when(mediaFileServiceMok.save(multipartFileMok)).thenReturn(testMediaFile);
 
@@ -68,6 +79,7 @@ class MediaFileControllerTest {
     }
 
     @Test
+    @DisplayName("When call uploadFileAndGetFileId with damaged file asserted ResponseEntity with HTTP status BAD_REQUEST")
     void uploadFileAndGetFileIdFailByRuntimeException() {
         when(mediaFileServiceMok.save(multipartFileMok)).thenThrow(new RuntimeException());
 
@@ -77,6 +89,7 @@ class MediaFileControllerTest {
     }
 
     @Test
+    @DisplayName("When call updateFile method with exist file id and not damaged file assert HTTP status OK")
     void updateFile() {
         HttpStatus testHttpStatus = mediaFileController.updateFile(multipartFileMok, testMediaFile.getId());
 
@@ -84,7 +97,8 @@ class MediaFileControllerTest {
     }
 
     @Test
-    void updateFileFail() {
+    @DisplayName("When call updateFile method with not exist file id and not damaged file assert HTTP status BAD_REQUEST")
+    void updateFileFailByMediaFileId() {
         doThrow(new MediaFileNotFoundException(testMediaFile.getId())).when(mediaFileServiceMok).update(multipartFileMok, testMediaFile.getId());
 
         HttpStatus testHttpStatus = mediaFileController.updateFile(multipartFileMok, testMediaFile.getId());
@@ -92,6 +106,17 @@ class MediaFileControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, testHttpStatus);
     }
 
+    @Test
+    @DisplayName("When call updateFile method with exist file id but damaged file assert HTTP status BAD_REQUEST")
+    void updateFileFailByMediaFile() {
+        doThrow(new RuntimeException()).when(mediaFileServiceMok).update(multipartFileMok, testMediaFile.getId());
+
+        HttpStatus testHttpStatus = mediaFileController.updateFile(multipartFileMok, testMediaFile.getId());
+
+        assertEquals(HttpStatus.BAD_REQUEST, testHttpStatus);
+    }
+
+    //TODO
     @Test
     void delete() {
         mediaFileController.delete(1L);

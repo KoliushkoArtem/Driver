@@ -1,11 +1,13 @@
 package pl.driver.converter;
 
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import pl.driver.dto.UserDto;
 import pl.driver.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Slf4j
 class UserDtoConverterTest {
 
     private final Long id = 123L;
@@ -14,7 +16,18 @@ class UserDtoConverterTest {
     private final String lastName = "Test Last Name";
     private final String email = "Test@email.com";
 
+    @BeforeEach
+    void setUp(TestInfo testInfo) {
+        log.info(String.format("test started: %s", testInfo.getDisplayName()));
+    }
+
+    @AfterEach
+    void tearDown(TestInfo testInfo) {
+        log.info(String.format("test finished: %s", testInfo.getDisplayName()));
+    }
+
     @Test
+    @DisplayName("When call convertToUserDto method assert that all similar fields would be an equals in incoming User and outputted UserDto")
     void convertToUserDto() {
         User user = new User();
         user.setId(id);
@@ -33,6 +46,7 @@ class UserDtoConverterTest {
     }
 
     @Test
+    @DisplayName("When call convertToUser method assert that all similar fields would be an equals in incoming UserDto and outputted User")
     void convertToUser() {
         UserDto userDto = new UserDto();
         userDto.setId(id);
