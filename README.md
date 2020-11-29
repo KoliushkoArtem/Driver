@@ -28,10 +28,10 @@ Power Mockito<br>
 Jacoco<br>
 
 ## Author:
-###Artem Koliushko
+### Artem Koliushko
 
-##License
-####Apache 2.0
+## License
+#### Apache 2.0
 ## How to use application
 ### Download all files or clone repository, set up in property.yml your database and run at the server
 ##### To see app Swagger2 documentation after server starting use link like below
